@@ -27,9 +27,11 @@ import {
 admin.initializeApp();
 
 const geminiApiKey = defineSecret("GEMINI_API_KEY");
-const googleCloudTtsKey = defineSecret("GOOGLE_CLOUD_TTS_KEY");
 const geminiModel = defineString("GEMINI_MODEL", {
   default: "gemini-3.5-flash",
+});
+const ttsModel = defineString("TTS_MODEL", {
+  default: "gemini-3.1-flash-tts-preview",
 });
 const adminEmail = defineString("ADMIN_EMAIL", { default: "" });
 
@@ -285,18 +287,26 @@ export const generatePersonalizedNote = onAiCall({
 });
 
 export const synthesizeChineseAudio = onCall(
-  { region, secrets: [googleCloudTtsKey] },
+  { region, secrets: [geminiApiKey] },
   async (request) => {
     const uid = requireUid(request as CallableRequest);
     const input = synthesizeChineseAudioInputSchema.parse(request.data);
-    const voiceName =
-      input.voicePreference?.voiceName ??
-      (input.voicePreference?.languageCode === "cmn-TW"
-        ? "cmn-TW-Wavenet-A"
-        : "cmn-CN-Neural2-A");
+
+    // Map legacy Google Cloud TTS voice names to Gemini prebuilt voices
+    const defaultVoice =
+      input.voicePreference?.languageCode === "cmn-TW" ? "Aoede" : "Kore";
+    const voiceName = input.voicePreference?.voiceName ?? defaultVoice;
     const languageCode = input.voicePreference?.languageCode ?? "cmn-CN";
+
     const hash = createHash("sha256")
-      .update(JSON.stringify({ ...input, voiceName, languageCode }))
+      .update(
+        JSON.stringify({
+          text: input.text,
+          voiceName,
+          languageCode,
+          speed: input.speed,
+        })
+      )
       .digest("hex")
       .slice(0, 32);
     const storagePath = `audio-cache/${languageCode}/${voiceName}/${hash}.mp3`;
@@ -306,40 +316,66 @@ export const synthesizeChineseAudio = onCall(
 
     if (!exists) {
       const apiKey = getRequiredSecret(
-        googleCloudTtsKey.value(),
-        "GOOGLE_CLOUD_TTS_KEY"
+        geminiApiKey.value(),
+        "GEMINI_API_KEY"
       );
-      const response = await fetch(
-        `https://texttospeech.googleapis.com/v1/text:synthesize?key=${apiKey}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            input: { text: input.text },
-            voice: { languageCode, name: voiceName },
-            audioConfig: {
-              audioEncoding: "MP3",
-              speakingRate: input.speed,
+      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${ttsModel.value()}:generateContent?key=${apiKey}`;
+
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [
+            {
+              parts: [{ text: input.text }],
             },
-          }),
-        }
-      );
+          ],
+          generationConfig: {
+            response_modalities: ["AUDIO"],
+            speech_config: {
+              voice_config: {
+                prebuilt_voice_config: {
+                  voice_name: voiceName,
+                },
+              },
+            },
+          },
+        }),
+      });
 
       if (!response.ok) {
         throw new HttpsError(
           "internal",
-          `Text-to-Speech request failed with status ${response.status}.`
+          `Gemini TTS request failed with status ${response.status}.`
         );
       }
 
-      const payload = (await response.json()) as { audioContent?: string };
-      if (!payload.audioContent) {
-        throw new HttpsError("internal", "Text-to-Speech returned no audio.");
+      type GeminiTtsPayload = {
+        candidates?: Array<{
+          content?: {
+            parts?: Array<{
+              inlineData?: { mimeType?: string; data?: string };
+            }>;
+          };
+        }>;
+      };
+
+      const payload = (await response.json()) as GeminiTtsPayload;
+      const audioPart = payload.candidates?.[0]?.content?.parts?.find(
+        (p) => p.inlineData?.data
+      );
+      const audioData = audioPart?.inlineData?.data;
+
+      if (!audioData) {
+        throw new HttpsError("internal", "Gemini TTS returned no audio data.");
       }
 
-      await file.save(Buffer.from(payload.audioContent, "base64"), {
+      const mimeType =
+        audioPart?.inlineData?.mimeType ?? "audio/mpeg";
+
+      await file.save(Buffer.from(audioData, "base64"), {
         resumable: false,
-        contentType: "audio/mpeg",
+        contentType: mimeType,
         metadata: {
           metadata: {
             userId: uid,
@@ -364,8 +400,14 @@ export const synthesizeChineseAudio = onCall(
     await admin.firestore().collection("aiSessions").add({
       userId: uid,
       type: "tts",
-      inputSummary: JSON.stringify({ text: input.text, voiceName }).slice(0, 1200),
-      outputSummary: JSON.stringify({ storagePath, cached: exists }).slice(0, 1200),
+      inputSummary: JSON.stringify({ text: input.text, voiceName }).slice(
+        0,
+        1200
+      ),
+      outputSummary: JSON.stringify({ storagePath, cached: exists }).slice(
+        0,
+        1200
+      ),
       createdAt: admin.firestore.FieldValue.serverTimestamp(),
     });
 
