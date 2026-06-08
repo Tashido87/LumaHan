@@ -1,0 +1,104 @@
+{
+  "hskLevels": [
+    {
+      "id": "hsk1",
+      "levelNumber": 1,
+      "title": "HSK 1 Foundations",
+      "description": "Pronouns, greetings, numbers, dates, and basic questions.",
+      "order": 1
+    }
+  ],
+  "units": [
+    {
+      "id": "hsk1-u1",
+      "hskLevel": 1,
+      "title": "First Contacts",
+      "description": "Greetings, pronouns, and yes/no questions.",
+      "order": 1,
+      "isLockedByDefault": false
+    }
+  ],
+  "lessons": [
+    {
+      "id": "hsk1-hello",
+      "hskLevel": 1,
+      "unitId": "hsk1-u1",
+      "title": "Say Hello",
+      "description": "Greet people, say your name, and ask simple questions.",
+      "order": 1,
+      "estimatedMinutes": 12,
+      "vocabularyIds": ["ni", "hao", "wo", "ma"],
+      "grammarIds": ["yes-no-ma"],
+      "characterIds": ["char-ni", "char-hao", "char-wo"],
+      "prerequisiteLessonIds": []
+    }
+  ],
+  "vocabulary": [
+    {
+      "id": "ni",
+      "hskLevel": 1,
+      "simplified": "你",
+      "traditional": "你",
+      "pinyin": "nǐ",
+      "englishMeaning": "you",
+      "partOfSpeech": "pronoun",
+      "tags": ["pronoun", "core"],
+      "exampleSentenceIds": ["s-hello", "s-question"],
+      "relatedCharacterIds": ["char-ni"],
+      "difficultyScore": 18
+    }
+  ],
+  "characters": [
+    {
+      "id": "char-ni",
+      "hskLevel": 1,
+      "simplified": "你",
+      "traditional": "你",
+      "pinyin": "nǐ",
+      "meaning": "you",
+      "radical": "亻",
+      "components": ["亻", "尔"],
+      "strokeCount": 7,
+      "strokeOrderAssetUrl": "",
+      "strokeOrderReferenceUrl": "",
+      "exampleWordIds": ["ni"],
+      "exampleSentenceIds": ["s-hello"],
+      "notes": "Admin can attach stroke-order assets or references here."
+    }
+  ],
+  "grammarPoints": [
+    {
+      "id": "yes-no-ma",
+      "hskLevel": 1,
+      "title": "Yes/no questions with 吗",
+      "pattern": "Statement + 吗？",
+      "explanation": "Add 吗 at the end of a statement to turn it into a yes/no question.",
+      "examples": [
+        {
+          "simplified": "你好吗？",
+          "traditional": "你好嗎？",
+          "pinyin": "Nǐ hǎo ma?",
+          "englishTranslation": "How are you?"
+        }
+      ],
+      "commonMistakes": ["Do not add 吗 to wh-questions."],
+      "relatedVocabularyIds": ["ma", "ni", "hao"],
+      "relatedLessonIds": ["hsk1-hello"]
+    }
+  ],
+  "exampleSentences": [
+    {
+      "id": "s-question",
+      "hskLevel": 1,
+      "simplified": "你好吗？",
+      "traditional": "你好嗎？",
+      "pinyin": "Nǐ hǎo ma?",
+      "englishTranslation": "How are you?",
+      "vocabularyIds": ["ni", "hao", "ma"],
+      "grammarIds": ["yes-no-ma"],
+      "audioUrl": "",
+      "createdBy": "admin",
+      "reviewed": true
+    }
+  ]
+}

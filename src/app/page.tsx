@@ -1,65 +1,147 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useAuth } from "@/components/providers/auth-provider";
+import {
+  ArrowRight,
+  BookOpenText,
+  CheckCircle2,
+  LockKeyhole,
+  Loader2,
+  Sparkles,
+} from "lucide-react";
+
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+
+export default function AuthLandingPage() {
+  const { signIn, error } = useAuth();
+  const router = useRouter();
+  const [loggingIn, setLoggingIn] = useState(false);
+
+  const handleLogin = async () => {
+    setLoggingIn(true);
+    try {
+      await signIn();
+      router.push("/dashboard");
+    } catch (e) {
+      console.error("Authentication error:", e);
+      setLoggingIn(false);
+    }
+  };
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <main className="relative min-h-screen overflow-hidden bg-slate-950 text-white">
+      <Image
+        src="/images/lumahan-hero.png"
+        alt="Illustration of a private Chinese learning workspace"
+        fill
+        unoptimized
+        priority
+        className="object-cover"
+        sizes="100vw"
+      />
+      <div className="absolute inset-0 bg-gradient-to-r from-slate-950/88 via-slate-900/36 to-slate-950/8" />
+      <div className="absolute inset-0 bg-gradient-to-t from-background/92 via-transparent to-slate-950/18" />
+
+      <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-7xl flex-col px-5 py-5 sm:px-8 lg:px-10">
+        <nav className="flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-3">
+            <span className="grid size-11 place-items-center rounded-xl bg-white/12 text-white ring-1 ring-white/18 backdrop-blur">
+              <Sparkles className="size-5" />
+            </span>
+            <span className="text-lg font-semibold">LumaHan</span>
+          </Link>
+          <Badge className="rounded-md bg-white/12 text-white ring-1 ring-white/18 hover:bg-white/12">
+            Private study app
+          </Badge>
+        </nav>
+
+        <section className="grid flex-1 content-center gap-8 py-12 lg:grid-cols-[minmax(0,0.92fr)_26rem] lg:items-center">
+          <div className="max-w-3xl">
+            <Badge className="rounded-md bg-emerald-400/18 text-emerald-100 ring-1 ring-emerald-300/25 hover:bg-emerald-400/18">
+              HSK 1-5 · Simplified and traditional side by side
+            </Badge>
+            <h1 className="mt-5 text-5xl font-semibold tracking-normal text-balance sm:text-6xl lg:text-7xl">
+              LumaHan
+            </h1>
+            <p className="mt-5 max-w-2xl text-lg leading-8 text-white/78">
+              A private Chinese learning workspace for vocabulary, grammar,
+              characters, listening, speaking, typing, review, AI notes, and
+              progress analytics.
+            </p>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <Button
+                onClick={handleLogin}
+                disabled={loggingIn}
+                size="lg"
+                className="h-11 bg-white text-slate-950 hover:bg-white/90"
+              >
+                {loggingIn ? (
+                  <Loader2 className="size-4 animate-spin" />
+                ) : (
+                  <LockKeyhole className="size-4" />
+                )}
+                {loggingIn ? "Connecting..." : "Continue with Google"}
+              </Button>
+              <Button
+                asChild
+                size="lg"
+                variant="outline"
+                className="h-11 border-white/25 bg-white/8 text-white hover:bg-white/14 hover:text-white"
+              >
+                <Link href="/learn">
+                  View HSK path
+                  <ArrowRight className="size-4" />
+                </Link>
+              </Button>
+            </div>
+            {error ? (
+              <div className="mt-4 max-w-2xl rounded-xl border border-rose-300/40 bg-rose-500/18 px-4 py-3 text-sm leading-6 text-rose-50">
+                {error}
+              </div>
+            ) : null}
+            <div className="mt-8 grid gap-3 text-sm text-white/82 sm:grid-cols-3">
+              {[
+                "Curated dataset first",
+                "Gemini-enhanced practice",
+                "Private Firebase backend",
+              ].map((item) => (
+                <div key={item} className="flex items-center gap-2">
+                  <CheckCircle2 className="size-4 text-emerald-300" />
+                  {item}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="han-surface rounded-2xl border-white/24 bg-slate-950/34 p-5 text-white shadow-2xl shadow-slate-950/25">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <p className="text-sm text-white/62">Next session</p>
+                <h2 className="mt-1 text-2xl font-semibold">Weakness repair</h2>
+              </div>
+              <BookOpenText className="size-7 text-emerald-200" />
+            </div>
+            <div className="mt-5 grid gap-3">
+              <div className="rounded-xl bg-white/18 p-4 ring-1 ring-white/16">
+                <p className="text-xs uppercase text-white/55">Simplified</p>
+                <p className="mt-2 text-5xl font-semibold">学习了</p>
+              </div>
+              <div className="rounded-xl bg-white/18 p-4 ring-1 ring-white/16">
+                <p className="text-xs uppercase text-white/55">Traditional</p>
+                <p className="mt-2 text-5xl font-semibold">學習了</p>
+              </div>
+              <div className="rounded-xl bg-emerald-300/16 p-4 ring-1 ring-emerald-200/18">
+                <p className="text-lg font-medium text-emerald-100">xuéxí le</p>
+                <p className="mt-1 text-sm text-white/70">completed studying</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
   );
 }

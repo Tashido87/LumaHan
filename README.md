@@ -1,36 +1,96 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# LumaHan
 
-## Getting Started
+Private Chinese learning web app for HSK 1 to HSK 5.
 
-First, run the development server:
+## What Is Built
+
+- Next.js 16 App Router, TypeScript, Tailwind CSS, shadcn/ui primitives
+- Full Stage 1 static UI shell with mock HSK content
+- Routes: auth landing, dashboard, HSK path, lessons, practice, review, listening, speaking, character detail, grammar, vocabulary, notes, AI tutor, analytics, daily challenge, admin, settings
+- Firebase client boundary, Firestore/Storage rules, indexes, seed data example
+- Cloud Functions scaffolding for Gemini JSON features and Google Cloud Text-to-Speech audio caching
+
+## Run Locally
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment Setup
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Copy `.env.example` to `.env.local` and fill Firebase web config:
 
-## Learn More
+```bash
+cp .env.example .env.local
+```
 
-To learn more about Next.js, take a look at the following resources:
+Client-visible Firebase keys use `NEXT_PUBLIC_FIREBASE_*`. Keep `GEMINI_API_KEY`, `GOOGLE_CLOUD_TTS_KEY`, service account paths, and `ADMIN_EMAIL` server-only.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Firebase Setup
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Create a Firebase project.
+2. Enable Google sign-in in Firebase Authentication.
+3. Create Firestore in native mode.
+4. Enable Firebase Storage.
+5. In Firebase Console > Authentication > Settings > Authorized domains, add:
+   - `localhost`
+   - `lumahan-10d75.firebaseapp.com`
+   - `lumahan.vercel.app`
+   - any future custom production domain
+6. Copy `.firebaserc.example` to `.firebaserc` and set your project ID.
+7. Deploy rules and indexes:
 
-## Deploy on Vercel
+```bash
+firebase deploy --only firestore:rules,firestore:indexes,storage
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Admin assignment is server-controlled by `ensureUserProfile`. The first signed-in user becomes admin, or set `ADMIN_EMAIL` for a configured admin address.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The Firebase config for `lumahan-10d75` is already represented by `.env.local` for local development. Add the same `NEXT_PUBLIC_FIREBASE_*` values to your Vercel project environment variables.
+
+## Cloud Functions
+
+Install and build functions:
+
+```bash
+npm --prefix functions install
+npm --prefix functions run build
+```
+
+Set secrets/params before deploying:
+
+```bash
+firebase functions:secrets:set GEMINI_API_KEY
+firebase functions:secrets:set GOOGLE_CLOUD_TTS_KEY
+```
+
+For this scaffold, `ADMIN_EMAIL` is read as a Functions parameter/env value. Put `ADMIN_EMAIL=you@example.com` in `functions/.env` for local emulator use and set the same parameter in your Firebase deployment workflow if you want a configured admin instead of first-user bootstrap.
+
+Deploy:
+
+```bash
+firebase deploy --only functions
+```
+
+## Seed Data
+
+`data/seed/hsk-real-old-1-5.json` contains the real classic HSK 1-5 vocabulary seed generated from the MIT-licensed Complete HSK Vocabulary dataset.
+
+Generate/update it with:
+
+```bash
+npm run seed:generate
+```
+
+The admin dashboard imports this seed in Firestore-safe chunks.
+
+## Manual Configuration Remaining
+
+- Add the deployed domain to Firebase Auth authorized domains.
+- Add the same Firebase/Gemini environment variables in Vercel.
+- Set Firebase Functions secrets for Gemini and Text-to-Speech before deploying functions.
+- Attach stroke-order asset URLs or reference URLs in admin content.
+- Import/admin-review grammar points and base example sentences.

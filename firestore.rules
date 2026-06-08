@@ -1,0 +1,120 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return signedIn() && request.auth.uid == userId;
+    }
+
+    function currentUserDoc() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid));
+    }
+
+    function isAdmin() {
+      return signedIn()
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        && currentUserDoc().data.role == "admin";
+    }
+
+    function ownsIncomingUserData() {
+      return signedIn()
+        && request.resource.data.userId is string
+        && request.resource.data.userId == request.auth.uid;
+    }
+
+    function ownsExistingUserData() {
+      return signedIn()
+        && resource.data.userId is string
+        && resource.data.userId == request.auth.uid;
+    }
+
+    match /users/{userId} {
+      allow read: if isOwner(userId) || isAdmin();
+      allow create: if isOwner(userId)
+        && request.resource.data.role == "learner";
+      allow update: if isOwner(userId)
+        && request.resource.data.role == resource.data.role;
+      allow delete: if isAdmin();
+    }
+
+    match /hskLevels/{docId} {
+      allow read: if signedIn();
+      allow write: if isAdmin();
+    }
+
+    match /units/{docId} {
+      allow read: if signedIn();
+      allow write: if isAdmin();
+    }
+
+    match /lessons/{docId} {
+      allow read: if signedIn();
+      allow write: if isAdmin();
+    }
+
+    match /vocabulary/{docId} {
+      allow read: if signedIn();
+      allow write: if isAdmin();
+    }
+
+    match /characters/{docId} {
+      allow read: if signedIn();
+      allow write: if isAdmin();
+    }
+
+    match /grammarPoints/{docId} {
+      allow read: if signedIn();
+      allow write: if isAdmin();
+    }
+
+    match /exampleSentences/{docId} {
+      allow read: if signedIn();
+      allow write: if isAdmin();
+    }
+
+    match /userProgress/{userId} {
+      allow read, write: if isOwner(userId) || isAdmin();
+
+      match /lessonProgress/{lessonId} {
+        allow read, write: if isOwner(userId) || isAdmin();
+      }
+
+      match /mastery/{itemId} {
+        allow read, write: if isOwner(userId) || isAdmin();
+      }
+    }
+
+    match /notes/{noteId} {
+      allow create: if ownsIncomingUserData();
+      allow read, update, delete: if ownsExistingUserData() || isAdmin();
+    }
+
+    match /exerciseResults/{resultId} {
+      allow create: if ownsIncomingUserData();
+      allow read, update, delete: if ownsExistingUserData() || isAdmin();
+    }
+
+    match /aiSessions/{sessionId} {
+      allow create: if ownsIncomingUserData();
+      allow read: if ownsExistingUserData() || isAdmin();
+      allow update, delete: if isAdmin();
+    }
+
+    match /dailyStats/{statId} {
+      allow create: if ownsIncomingUserData();
+      allow read, update, delete: if ownsExistingUserData() || isAdmin();
+    }
+
+    match /admin/{docId} {
+      allow read, write: if isAdmin();
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
