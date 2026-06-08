@@ -2,6 +2,9 @@
 
 import Link from "next/link";
 import { useAuth } from "@/components/providers/auth-provider";
+import { useEffect, useState } from "react";
+import { doc, getDoc } from "firebase/firestore";
+import { getFirebaseDb } from "@/lib/firebase/client";
 import {
   ArrowRight,
   BarChart3,
@@ -25,6 +28,35 @@ import { Separator } from "@/components/ui/separator";
 
 export default function DashboardPage() {
   const { profile, loading } = useAuth();
+  const [currentLessonTitle, setCurrentLessonTitle] = useState("Say Hello");
+  const [fetchingLesson, setFetchingLesson] = useState(false);
+
+  const hskLevel = profile?.currentHskLevel || 1;
+  const xp = profile?.xp || 0;
+  const streak = profile?.streakCount || 0;
+  const currentLessonId = profile?.currentLessonId || "hsk1-hello";
+
+  useEffect(() => {
+    if (loading || !profile || !currentLessonId) return;
+
+    async function fetchCurrentLesson() {
+      setFetchingLesson(true);
+      try {
+        const db = getFirebaseDb();
+        const lessonRef = doc(db, "lessons", currentLessonId);
+        const lessonSnap = await getDoc(lessonRef);
+        if (lessonSnap.exists()) {
+          setCurrentLessonTitle(lessonSnap.data().title || "Say Hello");
+        }
+      } catch (err) {
+        console.error("Error fetching dashboard lesson title:", err);
+      } finally {
+        setFetchingLesson(false);
+      }
+    }
+
+    fetchCurrentLesson();
+  }, [profile, currentLessonId, loading]);
 
   if (loading) {
     return (
@@ -34,30 +66,26 @@ export default function DashboardPage() {
     );
   }
 
-  const hskLevel = profile?.currentHskLevel || 1;
-  const xp = profile?.xp || 0;
-  const streak = profile?.streakCount || 0;
-  const currentLessonId = profile?.currentLessonId || "hsk1-hello";
-
   // Calculate dynamic level completion and reviews based on XP
-  const levelProgress = profile ? Math.min(100, Math.max(10, (xp % 500) / 5)) : 74;
-  const reviewDue = profile ? Math.max(0, Math.round(xp / 15)) : 24;
+  const levelProgress = xp > 0 ? Math.min(100, Math.max(10, (xp % 500) / 5)) : 0;
+  const reviewDue = xp > 0 ? Math.max(0, Math.round(xp / 15)) : 0;
 
-  const currentLessonTitle = currentLessonId === "hsk1-family" ? "Family Words" : "Say Hello";
-  
-  const userWeakAreas = (profile?.weakAreas as string[]) || [
-    "Tone sandhi in 你好",
-    "Overusing 了 with past-time words",
-  ];
+  // Real or initial user statistics
+  const userWeakAreas = (profile?.weakAreas as string[]) || [];
 
-  const aiTip = profile?.aiTip || "Your recent pinyin errors cluster around third-tone pairs. Practice 你好 slowly before adding longer HSK 1 sentences, then switch to one listening set.";
+  const aiTip = profile?.aiTip || (xp > 0 
+    ? "Keep up the great work! Study your notes and practice writing characters daily to boost retention."
+    : "Welcome to LumaHan! Click 'Continue lesson' to start your first HSK 1 lesson and unlock your learning stats.");
+
+  // If the user has no XP, weekly activity is all zeros
+  const weeklyXpData = xp > 0 ? [20, 15, 30, 10, 25, 0, 0] : [0, 0, 0, 0, 0, 0, 0];
 
   return (
     <>
       <PageHeader
         eyebrow="Dashboard"
         title={`Welcome back, ${profile?.displayName || "Learner"}`}
-        description={`Your HSK ${hskLevel} path is active. Today’s plan is focused on vocabulary consolidation and character writing practice.`}
+        description={`Your HSK ${hskLevel} path is active. ${xp > 0 ? "Today’s plan is focused on vocabulary consolidation and character writing practice." : "Start your HSK learning journey today!"}`}
         actions={
           <>
             <Button asChild>
@@ -122,8 +150,8 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             {[
-              ["Continue lesson", currentLessonTitle, currentLessonId === "hsk1-family" ? 62 : 0],
-              ["Weakness repair", "Tone sandhi & grammar review", 40],
+              ["Continue lesson", fetchingLesson ? "Loading..." : currentLessonTitle, xp > 0 ? 62 : 0],
+              ["Weakness repair", userWeakAreas.length > 0 ? `${userWeakAreas.length} items flagged for review` : "No weaknesses detected yet", 0],
               ["Listening focus", "Practice pinyin identification", 0],
               ["AI note", "Review character strokes", 0],
             ].map(([label, value, progress]) => (
@@ -158,21 +186,29 @@ export default function DashboardPage() {
             <div>
               <p className="text-sm font-medium">Weak areas</p>
               <div className="mt-3 flex flex-wrap gap-2">
-                {userWeakAreas.map((area) => (
-                  <Badge key={area} variant="secondary" className="rounded-md">
-                    {area}
-                  </Badge>
-                ))}
+                {userWeakAreas.length > 0 ? (
+                  userWeakAreas.map((area) => (
+                    <Badge key={area} variant="secondary" className="rounded-md">
+                      {area}
+                    </Badge>
+                  ))
+                ) : (
+                  <span className="text-sm text-muted-foreground">No weak areas identified yet. Great job!</span>
+                )}
               </div>
             </div>
           </CardContent>
         </Card>
       </section>
 
-      <ConfusionPanel />
+      <ConfusionPanel 
+        confusionRate={xp > 0 ? 11 : 0} 
+        pinyinMisses={xp > 0 ? 18 : 0} 
+        reviewCount={reviewDue} 
+      />
 
       <section className="grid gap-5 xl:grid-cols-[1fr_0.8fr]">
-        <WeeklyActivityChart />
+        <WeeklyActivityChart xpValues={weeklyXpData} />
         <Card className="han-card rounded-xl">
           <CardHeader>
             <CardTitle>Progress prediction</CardTitle>
@@ -181,7 +217,7 @@ export default function DashboardPage() {
             <div>
               <div className="flex items-center justify-between gap-3 text-sm">
                 <span>{`HSK ${hskLevel} completion`}</span>
-                <span className="text-muted-foreground">Estimated 10 days</span>
+                <span className="text-muted-foreground">{xp > 0 ? "Estimated 10 days" : "Awaiting first lesson"}</span>
               </div>
               <Progress value={levelProgress} className="mt-2 h-2" />
             </div>
