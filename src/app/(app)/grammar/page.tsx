@@ -70,7 +70,7 @@ export default function GrammarPage() {
           <Loader2 className="size-8 animate-spin text-primary" />
         </div>
       ) : filteredGrammar.length === 0 ? (
-        <Card className="p-8 text-center border-dashed rounded-xl">
+        <Card className="glass-subtle p-8 text-center text-center">
           <p className="text-sm text-muted-foreground">
             No grammar points found matching your search.
           </p>
@@ -78,7 +78,7 @@ export default function GrammarPage() {
       ) : (
         <div className="grid gap-4 lg:grid-cols-2">
           {filteredGrammar.map((point) => (
-            <Card key={point.id} className="han-card rounded-xl">
+            <Card key={point.id}>
               <CardHeader>
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
@@ -86,32 +86,32 @@ export default function GrammarPage() {
                       <BookMarked className="size-4 text-primary" />
                       {point.title}
                     </CardTitle>
-                    <p className="mt-2 text-sm text-muted-foreground">{point.pattern}</p>
+                    <p className="mt-2 text-[13px] text-muted-foreground">{point.pattern}</p>
                   </div>
-                  <Badge variant="secondary" className="rounded-md">
+                  <Badge variant="secondary" className="rounded-full text-[11px]">
                     HSK {point.hskLevel}
                   </Badge>
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
-                <p className="text-sm leading-6 text-muted-foreground">
+                <p className="text-[13px] leading-6 text-muted-foreground">
                   {point.explanation}
                 </p>
                 {point.examples.map((sentence, index) => (
-                  <div key={index} className="rounded-xl border border-border/70 bg-white/70 p-4">
+                  <div key={index} className="glass-subtle rounded-2xl p-4">
                     <div className="grid gap-3 sm:grid-cols-2">
-                      <p className="text-2xl font-semibold">{sentence.simplified}</p>
-                      <p className="text-2xl font-semibold">{sentence.traditional}</p>
+                      <p className="text-2xl font-semibold tracking-tight">{sentence.simplified}</p>
+                      <p className="text-2xl font-semibold tracking-tight">{sentence.traditional}</p>
                     </div>
-                    <p className="mt-3 font-medium text-sky-800">{sentence.pinyin}</p>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="mt-3 font-medium text-primary">{sentence.pinyin}</p>
+                    <p className="text-[13px] text-muted-foreground">
                       {sentence.englishTranslation}
                     </p>
                   </div>
                 ))}
                 <div className="flex flex-wrap gap-2">
                   {point.commonMistakes.map((mistake) => (
-                    <Badge key={mistake} variant="outline" className="rounded-md">
+                    <Badge key={mistake} variant="outline" className="rounded-full text-[11px]">
                       {mistake}
                     </Badge>
                   ))}

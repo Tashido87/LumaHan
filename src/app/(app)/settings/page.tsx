@@ -15,8 +15,8 @@ export default function SettingsPage() {
         title="Private app settings"
         description="Google sign-in, profile defaults, learning preferences, AI features, TTS voice preferences, and admin configuration."
       />
-      <div className="grid gap-5 xl:grid-cols-[1fr_22rem]">
-        <Card className="han-card rounded-xl">
+      <div className="grid gap-4 xl:grid-cols-[1fr_22rem]">
+        <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <UserRound className="size-5 text-primary" />
@@ -42,8 +42,8 @@ export default function SettingsPage() {
             </div>
           </CardContent>
         </Card>
-        <div className="space-y-5">
-          <Card className="han-card rounded-xl">
+        <div className="space-y-4">
+          <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Bell className="size-5 text-primary" />
@@ -64,7 +64,7 @@ export default function SettingsPage() {
               ))}
             </CardContent>
           </Card>
-          <Card className="han-card rounded-xl">
+          <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <ShieldCheck className="size-5 text-primary" />
@@ -73,12 +73,12 @@ export default function SettingsPage() {
             </CardHeader>
             <CardContent className="space-y-3">
               <Input defaultValue="admin@example.com" aria-label="Admin email" />
-              <Button className="w-full" variant="outline">
+              <Button className="w-full rounded-full" variant="outline">
                 Save admin email
               </Button>
             </CardContent>
           </Card>
-          <Card className="han-card rounded-xl">
+          <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Moon className="size-5 text-primary" />

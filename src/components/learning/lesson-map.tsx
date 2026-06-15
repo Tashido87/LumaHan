@@ -62,18 +62,18 @@ function LessonNode({ lesson, index }: { lesson: Lesson; index: number }) {
         className={cn(
           "grid size-14 shrink-0 place-items-center rounded-2xl border shadow-sm",
           lesson.status === "completed" &&
-            "border-emerald-200 bg-emerald-500 text-white",
+            "border-primary/30 bg-primary text-primary-foreground",
           lesson.status === "in_progress" &&
-            "border-sky-200 bg-sky-500 text-white",
+            "border-primary/40 bg-primary/80 text-primary-foreground",
           lesson.status === "available" &&
-            "border-violet-200 bg-white text-violet-700",
-          isCheckpoint && "border-amber-200 bg-amber-400 text-amber-950",
+            "border-border bg-card text-primary",
+          isCheckpoint && "border-orange-400/40 bg-orange-400 text-white",
           isLocked && "border-border bg-muted text-muted-foreground"
         )}
       >
         <Icon className="size-5" />
       </div>
-      <Card className="han-card flex-1 rounded-xl">
+      <Card className="flex-1">
         <CardContent className="p-4">
           <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
             <div className="min-w-0">
@@ -126,11 +126,11 @@ export function LessonMap() {
         }
 
         const accents: Record<number, string> = {
-          1: "bg-emerald-500",
-          2: "bg-sky-500",
-          3: "bg-violet-500",
-          4: "bg-amber-500",
-          5: "bg-rose-500",
+          1: "bg-primary",
+          2: "bg-primary/85",
+          3: "bg-primary/70",
+          4: "bg-primary/55",
+          5: "bg-primary/40",
         };
 
         const levelsList: HskLevelConfig[] = levelsSnap.docs.map((docSnap) => {
@@ -140,7 +140,7 @@ export function LessonMap() {
             level: lvlNum,
             title: data.title || `HSK ${lvlNum}`,
             description: data.description || "",
-            accent: accents[lvlNum] || "bg-emerald-500",
+            accent: accents[lvlNum] || "bg-primary",
             progress: lvlNum === 1 ? (profile?.xp ? Math.min(100, Math.round(profile.xp / 10)) : 0) : 0, // Fallback logic based on user profile XP
             unitsCompleted: 0,
             totalUnits: 0,
@@ -293,25 +293,25 @@ export function LessonMap() {
   // Database is empty (no HSK levels loaded)
   if (hskLevels.length === 0) {
     return (
-      <Card className="border-amber-200 bg-amber-50/70 p-6 rounded-xl">
+      <Card className="glass-subtle p-6">
         <div className="flex gap-3">
-          <AlertCircle className="size-5 text-amber-600 shrink-0 mt-0.5" />
+          <AlertCircle className="size-5 shrink-0 text-orange-600 mt-0.5" />
           <div>
-            <h3 className="font-semibold text-amber-900">Database is empty</h3>
-            <p className="mt-1 text-sm text-amber-700 leading-6">
+            <h3 className="font-semibold">Database is empty</h3>
+            <p className="mt-1 text-sm text-muted-foreground leading-6">
               There is currently no curriculum content loaded in your Firestore database.
             </p>
             {profile?.role === "admin" ? (
               <div className="mt-4">
-                <p className="text-sm text-amber-800">
-                  As an <strong>Admin</strong>, you can seed the database instantly:
+                <p className="text-sm text-muted-foreground">
+                  As an <strong>admin</strong>, you can seed the database instantly:
                 </p>
-                <Button asChild size="sm" className="mt-3 bg-amber-600 hover:bg-amber-700 text-white">
+                <Button asChild size="sm" className="mt-3 rounded-full">
                   <Link href="/admin">Go to Admin Dashboard to Import Seed</Link>
                 </Button>
               </div>
             ) : (
-              <p className="mt-2 text-sm text-amber-800">
+              <p className="mt-2 text-sm text-muted-foreground">
                 Please contact an administrator to seed the curriculum database.
               </p>
             )}
@@ -323,7 +323,7 @@ export function LessonMap() {
 
   return (
     <Tabs defaultValue={`${hskLevels[0]?.level || 1}`} className="gap-5">
-      <TabsList className="grid h-auto w-full grid-cols-2 gap-2 bg-white/60 p-2 sm:grid-cols-5">
+      <TabsList className="glass-subtle grid h-auto w-full grid-cols-2 gap-2 rounded-2xl p-2 sm:grid-cols-5">
         {hskLevels.map((level) => (
           <TabsTrigger key={level.level} value={`${level.level}`} className="h-10">
             HSK {level.level}
@@ -374,7 +374,7 @@ export function LessonMap() {
                     </section>
                   ))
                 ) : (
-                  <Card className="han-card rounded-xl">
+                  <Card>
                     <CardContent className="p-6">
                       <p className="text-sm text-muted-foreground">
                         Curriculum slots are ready for curated HSK {level.level} data.
@@ -383,17 +383,17 @@ export function LessonMap() {
                   </Card>
                 )}
               </div>
-              <Card className="han-card rounded-xl">
+              <Card>
                 <CardContent className="space-y-4 p-5">
                   <div>
-                    <p className="text-sm text-muted-foreground">Level progress</p>
-                    <p className="mt-1 text-3xl font-semibold">{level.progress}%</p>
+                    <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">Level progress</p>
+                    <p className="mt-1 text-3xl font-semibold tracking-tight">{level.progress}%</p>
                   </div>
                   <Progress value={level.progress} className="h-2" />
-                  <p className="text-sm leading-6 text-muted-foreground">
+                  <p className="text-[13px] leading-6 text-muted-foreground">
                     {level.description}
                   </p>
-                  <div className="rounded-xl bg-white/70 p-3 text-sm">
+                  <div className="glass-subtle rounded-xl p-3 text-[13px]">
                     {level.unitsCompleted} of {level.totalUnits} units completed
                   </div>
                 </CardContent>

@@ -3,24 +3,28 @@ import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import type { MasteryMetric } from "@/types/learning";
 
-const toneClass = {
-  green: "bg-emerald-500",
-  blue: "bg-sky-500",
-  violet: "bg-violet-500",
-  amber: "bg-amber-500",
-  rose: "bg-rose-500",
-};
+/* One hue family for the bars. Higher XP = denser, so the chart reads as a
+   single coherent shape instead of seven competing colors. */
+const barTone = [
+  "bg-primary/70",
+  "bg-primary/60",
+  "bg-primary/90",
+  "bg-primary/55",
+  "bg-primary/80",
+  "bg-primary/50",
+  "bg-primary/65",
+];
 
 export function MasteryBars({ metrics }: { metrics: MasteryMetric[] }) {
   return (
-    <Card className="han-card rounded-xl">
+    <Card>
       <CardHeader>
         <CardTitle>Mastery snapshot</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-3.5">
         {metrics.map((metric) => (
-          <div key={metric.label} className="space-y-2">
-            <div className="flex items-center justify-between gap-3 text-sm">
+          <div key={metric.label} className="space-y-1.5">
+            <div className="flex items-center justify-between gap-3 text-[13px]">
               <span className="font-medium">{metric.label}</span>
               <span className="text-muted-foreground">
                 {metric.score}% · {metric.delta}
@@ -36,44 +40,58 @@ export function MasteryBars({ metrics }: { metrics: MasteryMetric[] }) {
 
 export function WeeklyActivityChart({ xpValues }: { xpValues?: number[] }) {
   const standardDays = [
-    { label: "Mon", xp: xpValues?.[0] ?? 0, tone: "green" },
-    { label: "Tue", xp: xpValues?.[1] ?? 0, tone: "blue" },
-    { label: "Wed", xp: xpValues?.[2] ?? 0, tone: "violet" },
-    { label: "Thu", xp: xpValues?.[3] ?? 0, tone: "amber" },
-    { label: "Fri", xp: xpValues?.[4] ?? 0, tone: "rose" },
-    { label: "Sat", xp: xpValues?.[5] ?? 0, tone: "green" },
-    { label: "Sun", xp: xpValues?.[6] ?? 0, tone: "blue" },
-  ] as const;
+    { label: "Mon", xp: xpValues?.[0] ?? 0 },
+    { label: "Tue", xp: xpValues?.[1] ?? 0 },
+    { label: "Wed", xp: xpValues?.[2] ?? 0 },
+    { label: "Thu", xp: xpValues?.[3] ?? 0 },
+    { label: "Fri", xp: xpValues?.[4] ?? 0 },
+    { label: "Sat", xp: xpValues?.[5] ?? 0 },
+    { label: "Sun", xp: xpValues?.[6] ?? 0 },
+  ];
 
   const totalXp = standardDays.reduce((acc, d) => acc + d.xp, 0);
+  const maxXP = Math.max(...standardDays.map((d) => d.xp), 1);
 
   return (
-    <Card className="han-card rounded-xl">
+    <Card>
       <CardHeader>
         <CardTitle>Weekly XP</CardTitle>
       </CardHeader>
       <CardContent>
         {totalXp === 0 ? (
-          <div className="flex h-44 flex-col items-center justify-center text-center">
-            <p className="text-sm font-medium text-muted-foreground">No XP recorded this week</p>
-            <p className="text-xs text-muted-foreground/80 mt-1">Complete HSK lessons or practice exercises to fill your chart!</p>
+          <div className="flex h-40 flex-col items-center justify-center text-center">
+            <p className="text-sm font-medium text-muted-foreground">
+              No XP recorded this week
+            </p>
+            <p className="mt-1 text-xs text-muted-foreground/80">
+              Complete HSK lessons or practice exercises to fill your chart!
+            </p>
           </div>
         ) : (
-          <div className="flex h-44 items-end gap-3">
-            {standardDays.map((day) => {
-              const maxXP = Math.max(...standardDays.map((d) => d.xp), 1);
+          <div className="flex h-40 items-end gap-2.5">
+            {standardDays.map((day, i) => {
               const heightPct = Math.round((day.xp / maxXP) * 100);
               return (
-                <div key={day.label} className="flex min-w-0 flex-1 flex-col items-center gap-2">
-                  <div className="flex h-32 w-full items-end rounded-lg bg-muted/70 p-1">
+                <div
+                  key={day.label}
+                  className="flex min-w-0 flex-1 flex-col items-center gap-1.5"
+                >
+                  <div className="flex h-32 w-full items-end rounded-lg bg-muted/50 p-1">
                     <div
-                      className={cn("w-full rounded-md flex items-center justify-center text-[10px] text-white font-semibold transition-all duration-300", toneClass[day.tone])}
-                      style={{ height: `${Math.max(day.xp > 0 ? 15 : 0, heightPct)}%` }}
+                      className={cn(
+                        "w-full rounded-md flex items-center justify-center text-[10px] font-semibold text-primary-foreground transition-all duration-300",
+                        barTone[i % barTone.length]
+                      )}
+                      style={{
+                        height: `${Math.max(day.xp > 0 ? 15 : 0, heightPct)}%`,
+                      }}
                     >
                       {day.xp > 0 && day.xp}
                     </div>
                   </div>
-                  <span className="text-xs text-muted-foreground">{day.label}</span>
+                  <span className="text-[11px] text-muted-foreground">
+                    {day.label}
+                  </span>
                 </div>
               );
             })}
@@ -97,7 +115,8 @@ export function ConfusionPanel({
     {
       label: "Simplified/traditional confusion",
       value: `${confusionRate}%`,
-      detail: confusionRate > 0 ? "学 / 學" : "Keep practicing to detect patterns",
+      detail:
+        confusionRate > 0 ? "学 / 學" : "Keep practicing to detect patterns",
     },
     {
       label: "Pinyin tone misses",
@@ -107,18 +126,25 @@ export function ConfusionPanel({
     {
       label: "Review due",
       value: String(reviewCount),
-      detail: reviewCount > 0 ? `${reviewCount} items in queue` : "All caught up!",
+      detail:
+        reviewCount > 0 ? `${reviewCount} items in queue` : "All caught up!",
     },
   ];
 
   return (
-    <div className="grid gap-4 md:grid-cols-3">
+    <div className="grid gap-3 sm:grid-cols-3">
       {rows.map((row) => (
-        <Card key={row.label} className="han-card rounded-xl">
-          <CardContent className="p-5">
-            <p className="text-sm text-muted-foreground">{row.label}</p>
-            <p className="mt-2 text-3xl font-semibold">{row.value}</p>
-            <p className="mt-1 text-sm text-muted-foreground">{row.detail}</p>
+        <Card key={row.label}>
+          <CardContent className="p-4">
+            <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+              {row.label}
+            </p>
+            <p className="mt-1.5 text-2xl font-semibold tracking-tight">
+              {row.value}
+            </p>
+            <p className="mt-0.5 text-[12px] text-muted-foreground">
+              {row.detail}
+            </p>
           </CardContent>
         </Card>
       ))}

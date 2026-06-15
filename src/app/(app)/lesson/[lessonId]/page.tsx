@@ -193,10 +193,10 @@ export default function LessonPage() {
 
   if (error || !lesson) {
     return (
-      <Card className="mx-auto max-w-xl p-8 text-center border-dashed rounded-xl">
-        <p className="font-semibold text-rose-600">Error</p>
+      <Card className="glass-subtle mx-auto max-w-xl p-8 text-center">
+        <p className="font-semibold text-destructive">Error</p>
         <p className="mt-2 text-sm text-muted-foreground">{error || "Lesson not found."}</p>
-        <Button asChild className="mt-4" size="sm">
+        <Button asChild className="mt-4 rounded-full" size="sm">
           <Link href="/learn">Back to curriculum</Link>
         </Button>
       </Card>
@@ -211,15 +211,15 @@ export default function LessonPage() {
         description={lesson.description}
         actions={
           <>
-            <Button variant="outline">
+            <Button variant="outline" className="rounded-full">
               <Bot className="size-4" />
               Ask AI
             </Button>
-            <Button variant="outline">
+            <Button variant="outline" className="rounded-full">
               <NotebookPen className="size-4" />
               Save to Notes
             </Button>
-            <Button asChild>
+            <Button asChild className="rounded-full">
               <Link href="/practice">
                 <Play className="size-4" />
                 Practice Now
@@ -229,23 +229,23 @@ export default function LessonPage() {
         }
       />
 
-      <section className="grid gap-4 md:grid-cols-3">
-        <Card className="han-card rounded-xl">
+      <section className="grid gap-3 sm:grid-cols-3">
+        <Card>
           <CardContent className="p-5">
-            <p className="text-sm text-muted-foreground">Estimated time</p>
-            <p className="mt-2 text-3xl font-semibold">{lesson.estimatedMinutes} min</p>
+            <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">Estimated time</p>
+            <p className="mt-2 text-3xl font-semibold tracking-tight">{lesson.estimatedMinutes} min</p>
           </CardContent>
         </Card>
-        <Card className="han-card rounded-xl">
+        <Card>
           <CardContent className="p-5">
-            <p className="text-sm text-muted-foreground">Lesson XP</p>
-            <p className="mt-2 text-3xl font-semibold">{lesson.xp || 10}</p>
+            <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">Lesson XP</p>
+            <p className="mt-2 text-3xl font-semibold tracking-tight">{lesson.xp || 10}</p>
           </CardContent>
         </Card>
-        <Card className="han-card rounded-xl">
+        <Card>
           <CardContent className="p-5">
-            <p className="text-sm text-muted-foreground">Completion</p>
-            <p className="mt-2 text-3xl font-semibold">{lesson.completion || 0}%</p>
+            <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">Completion</p>
+            <p className="mt-2 text-3xl font-semibold tracking-tight">{lesson.completion || 0}%</p>
           </CardContent>
         </Card>
       </section>
@@ -253,8 +253,8 @@ export default function LessonPage() {
       {vocabulary.length > 0 && (
         <section className="space-y-4">
           <div className="flex items-center justify-between gap-3">
-            <h2 className="text-xl font-semibold">Vocabulary</h2>
-            <Badge variant="secondary" className="rounded-md">
+            <h2 className="text-xl font-semibold tracking-tight">Vocabulary</h2>
+            <Badge variant="secondary" className="rounded-full text-[11px]">
               {vocabulary.length} cards
             </Badge>
           </div>
@@ -267,28 +267,28 @@ export default function LessonPage() {
       )}
 
       {(grammarPoints.length > 0 || characters.length > 0) && (
-        <section className="grid gap-5 lg:grid-cols-2">
+        <section className="grid gap-4 lg:grid-cols-2">
           {grammarPoints.length > 0 && (
             <div className="space-y-4">
-              <h2 className="text-xl font-semibold">Grammar</h2>
+              <h2 className="text-xl font-semibold tracking-tight">Grammar</h2>
               {grammarPoints.map((point) => (
-                <Card key={point.id} className="han-card rounded-xl">
+                <Card key={point.id}>
                   <CardHeader>
                     <CardTitle>{point.title}</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <Badge variant="outline" className="rounded-md">
+                    <Badge variant="outline" className="rounded-full text-[11px]">
                       {point.pattern}
                     </Badge>
-                    <p className="text-sm leading-6 text-muted-foreground">
+                    <p className="text-[13px] leading-6 text-muted-foreground">
                       {point.explanation}
                     </p>
                     {point.commonMistakes && point.commonMistakes.length > 0 ? (
-                      <div className="rounded-xl border border-amber-200 bg-amber-50 p-4">
-                        <p className="text-sm font-medium text-amber-900">
+                      <div className="glass-subtle rounded-2xl p-4">
+                        <p className="text-sm font-medium text-orange-700">
                           Common mistake
                         </p>
-                        <p className="mt-1 text-sm text-amber-900/75">
+                        <p className="mt-1 text-[13px] text-muted-foreground">
                           {point.commonMistakes[0]}
                         </p>
                       </div>
@@ -301,36 +301,36 @@ export default function LessonPage() {
 
           {characters.length > 0 && (
             <div className="space-y-4">
-              <h2 className="text-xl font-semibold">Characters</h2>
+              <h2 className="text-xl font-semibold tracking-tight">Characters</h2>
               {characters.map((character) => (
-                <Card key={character.id} className="han-card rounded-xl">
+                <Card key={character.id}>
                   <CardContent className="flex flex-col gap-4 p-5 md:flex-row md:items-center md:justify-between">
                     <div className="grid grid-cols-2 gap-3">
-                      <div className="rounded-xl bg-white/70 p-4">
-                        <p className="text-xs uppercase text-muted-foreground">
+                      <div className="glass-subtle rounded-2xl p-4">
+                        <p className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
                           Simplified
                         </p>
-                        <p className="mt-2 text-5xl font-semibold">
+                        <p className="mt-2 text-5xl font-semibold tracking-tight">
                           {character.simplified}
                         </p>
                       </div>
-                      <div className="rounded-xl bg-white/70 p-4">
-                        <p className="text-xs uppercase text-muted-foreground">
+                      <div className="glass-subtle rounded-2xl p-4">
+                        <p className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
                           Traditional
                         </p>
-                        <p className="mt-2 text-5xl font-semibold">
+                        <p className="mt-2 text-5xl font-semibold tracking-tight">
                           {character.traditional}
                         </p>
                       </div>
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="text-lg font-medium text-sky-800">
+                      <p className="text-lg font-medium text-primary">
                         {character.pinyin}
                       </p>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-[13px] text-muted-foreground">
                         {character.meaning}
                       </p>
-                      <Button asChild className="mt-3" size="sm" variant="outline">
+                      <Button asChild className="mt-3 rounded-full" size="sm" variant="outline">
                         <Link href={`/characters/${character.id}`}>
                           <PenLine className="size-4" />
                           Details
@@ -347,46 +347,46 @@ export default function LessonPage() {
 
       {exampleSentences.length > 0 && (
         <section className="space-y-4">
-          <h2 className="text-xl font-semibold">Example sentences</h2>
+          <h2 className="text-xl font-semibold tracking-tight">Example sentences</h2>
           <div className="grid gap-4 lg:grid-cols-2">
             {exampleSentences.map((sentence) => (
-              <Card key={sentence.id} className="han-card rounded-xl">
+              <Card key={sentence.id}>
                 <CardContent className="space-y-4 p-5">
                   <div className="grid gap-3 sm:grid-cols-2">
-                    <div className="rounded-xl bg-white/70 p-4">
-                      <p className="text-xs uppercase text-muted-foreground">
+                    <div className="glass-subtle rounded-2xl p-4">
+                      <p className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
                         Simplified
                       </p>
-                      <p className="mt-2 text-2xl font-semibold">
+                      <p className="mt-2 text-2xl font-semibold tracking-tight">
                         {sentence.simplified}
                       </p>
                     </div>
-                    <div className="rounded-xl bg-white/70 p-4">
-                      <p className="text-xs uppercase text-muted-foreground">
+                    <div className="glass-subtle rounded-2xl p-4">
+                      <p className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
                         Traditional
                       </p>
-                      <p className="mt-2 text-2xl font-semibold">
+                      <p className="mt-2 text-2xl font-semibold tracking-tight">
                         {sentence.traditional}
                       </p>
                     </div>
                   </div>
                   <div>
-                    <p className="font-medium text-sky-800">{sentence.pinyin}</p>
-                    <p className="mt-1 text-sm text-muted-foreground">
+                    <p className="font-medium text-primary">{sentence.pinyin}</p>
+                    <p className="mt-1 text-[13px] text-muted-foreground">
                       {sentence.englishTranslation}
                     </p>
                   </div>
                   <div className="flex flex-wrap gap-2">
-                    <Button size="sm" variant="outline">
+                    <Button size="sm" variant="outline" className="rounded-full">
                       <Headphones className="size-4" />
                       Audio
                     </Button>
                     {sentence.beyondCurrentLevel ? (
-                      <Badge className="rounded-md bg-amber-100 text-amber-700 hover:bg-amber-100">
+                      <Badge className="rounded-full bg-orange-500/12 text-orange-600 hover:bg-orange-500/12 text-[11px]">
                         Beyond current level
                       </Badge>
                     ) : (
-                      <Badge variant="secondary" className="rounded-md">
+                      <Badge variant="secondary" className="rounded-full text-[11px]">
                         Curated
                       </Badge>
                     )}
@@ -398,19 +398,19 @@ export default function LessonPage() {
         </section>
       )}
 
-      <Card className="han-card rounded-xl">
+      <Card>
         <CardContent className="flex flex-col gap-4 p-5 md:flex-row md:items-center md:justify-between">
           <div>
             <div className="flex items-center gap-2">
               <Sparkles className="size-4 text-primary" />
               <h2 className="font-semibold">AI enhancement boundary</h2>
             </div>
-            <p className="mt-2 text-sm leading-6 text-muted-foreground">
+            <p className="mt-2 text-[13px] leading-6 text-muted-foreground">
               Curated HSK content remains the source of truth. AI additions are
               marked, structured, and reviewable by admin.
             </p>
           </div>
-          <Button asChild variant="outline">
+          <Button asChild variant="outline" className="rounded-full">
             <Link href="/ai-tutor">Open AI tutor</Link>
           </Button>
         </CardContent>

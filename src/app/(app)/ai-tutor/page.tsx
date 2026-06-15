@@ -15,8 +15,8 @@ export default function AiTutorPage() {
         title="Ask about Chinese"
         description="AI explanations can reference curated HSK content, generate structured hints, and save clean personalized notes for later review."
       />
-      <div className="grid gap-5 xl:grid-cols-[1fr_20rem]">
-        <Card className="han-card rounded-xl">
+      <div className="grid gap-4 xl:grid-cols-[1fr_20rem]">
+        <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Bot className="size-5 text-primary" />
@@ -34,16 +34,16 @@ export default function AiTutorPage() {
                   >
                     {!isUser ? (
                       <Avatar className="size-9">
-                        <AvatarFallback className="bg-primary/10 text-primary">
+                        <AvatarFallback className="bg-primary/12 text-primary">
                           AI
                         </AvatarFallback>
                       </Avatar>
                     ) : null}
                     <div
-                      className={`max-w-[44rem] rounded-2xl px-4 py-3 text-sm leading-6 ${
+                      className={`max-w-[44rem] rounded-2xl px-4 py-3 text-[13px] leading-6 ${
                         isUser
                           ? "bg-primary text-primary-foreground"
-                          : "bg-white/80 text-foreground"
+                          : "glass-subtle text-foreground"
                       }`}
                     >
                       {message.content}
@@ -58,15 +58,15 @@ export default function AiTutorPage() {
                 placeholder="Ask about grammar, vocabulary, characters, or a sentence."
               />
               <div className="flex flex-wrap gap-2">
-                <Button>
+                <Button className="rounded-full">
                   <Send className="size-4" />
                   Send
                 </Button>
-                <Button variant="outline">
+                <Button variant="outline" className="rounded-full">
                   <NotebookPen className="size-4" />
                   Save answer as note
                 </Button>
-                <Button variant="outline">
+                <Button variant="outline" className="rounded-full">
                   <Wand2 className="size-4" />
                   Create practice
                 </Button>
@@ -74,7 +74,7 @@ export default function AiTutorPage() {
             </div>
           </CardContent>
         </Card>
-        <Card className="han-card rounded-xl">
+        <Card>
           <CardHeader>
             <CardTitle>Structured AI guardrails</CardTitle>
           </CardHeader>
@@ -86,9 +86,9 @@ export default function AiTutorPage() {
               "Mark uncertain HSK metadata as needs review",
               "Keep the app interface in English",
             ].map((guardrail) => (
-              <div key={guardrail} className="flex items-start gap-3 rounded-xl bg-white/70 p-3">
+              <div key={guardrail} className="glass-subtle flex items-start gap-3 rounded-2xl p-3">
                 <Sparkles className="mt-0.5 size-4 text-primary" />
-                <p className="text-sm leading-5 text-muted-foreground">{guardrail}</p>
+                <p className="text-[13px] leading-5 text-muted-foreground">{guardrail}</p>
               </div>
             ))}
           </CardContent>

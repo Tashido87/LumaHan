@@ -30,54 +30,54 @@ export default async function CharacterDetailPage({
         title={`${character.simplified} / ${character.traditional}`}
         description={character.notes}
         actions={
-          <Button variant="outline">
+          <Button variant="outline" className="rounded-full">
             <NotebookPen className="size-4" />
             Save character note
           </Button>
         }
       />
 
-      <section className="grid gap-5 lg:grid-cols-[1fr_22rem]">
-        <Card className="han-card rounded-xl">
-          <CardContent className="space-y-5 p-5">
+      <section className="grid gap-4 lg:grid-cols-[1fr_22rem]">
+        <Card>
+          <CardContent className="space-y-4 p-5">
             <div className="grid gap-4 sm:grid-cols-2">
-              <div className="rounded-2xl border border-border/70 bg-white/70 p-6 text-center">
-                <p className="text-xs font-medium uppercase text-muted-foreground">
+              <div className="glass-subtle rounded-2xl p-6 text-center">
+                <p className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
                   Simplified
                 </p>
-                <p className="mt-4 text-8xl font-semibold leading-none">
+                <p className="mt-4 text-8xl font-semibold leading-none tracking-tight">
                   {character.simplified}
                 </p>
               </div>
-              <div className="rounded-2xl border border-border/70 bg-white/70 p-6 text-center">
-                <p className="text-xs font-medium uppercase text-muted-foreground">
+              <div className="glass-subtle rounded-2xl p-6 text-center">
+                <p className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
                   Traditional
                 </p>
-                <p className="mt-4 text-8xl font-semibold leading-none">
+                <p className="mt-4 text-8xl font-semibold leading-none tracking-tight">
                   {character.traditional}
                 </p>
               </div>
             </div>
-            <div className="grid gap-4 md:grid-cols-4">
+            <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-4">
               {[
                 ["Pinyin", character.pinyin],
                 ["Meaning", character.meaning],
                 ["Radical", character.radical],
                 ["Strokes", `${character.strokeCount}`],
               ].map(([label, value]) => (
-                <div key={label} className="rounded-xl border border-border/70 bg-white/70 p-4">
-                  <p className="text-xs font-medium uppercase text-muted-foreground">
+                <div key={label} className="glass-subtle rounded-xl p-4">
+                  <p className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
                     {label}
                   </p>
-                  <p className="mt-2 text-lg font-semibold">{value}</p>
+                  <p className="mt-1.5 text-lg font-semibold tracking-tight">{value}</p>
                 </div>
               ))}
             </div>
-            <div className="rounded-xl border border-border/70 bg-white/70 p-5">
+            <div className="glass-subtle rounded-2xl p-5">
               <p className="text-sm font-medium">Components</p>
-              <div className="mt-3 flex flex-wrap gap-2">
+              <div className="mt-2.5 flex flex-wrap gap-2">
                 {character.components.map((component) => (
-                  <Badge key={component} variant="secondary" className="rounded-md text-base">
+                  <Badge key={component} variant="secondary" className="rounded-full text-base">
                     {component}
                   </Badge>
                 ))}
@@ -86,13 +86,13 @@ export default async function CharacterDetailPage({
           </CardContent>
         </Card>
 
-        <div className="space-y-5">
-          <Card className="han-card rounded-xl">
+        <div className="space-y-4">
+          <Card>
             <CardHeader>
               <CardTitle>Stroke order</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid aspect-square place-items-center rounded-2xl border border-dashed border-border bg-white/70">
+              <div className="glass-subtle grid aspect-square place-items-center rounded-2xl border border-dashed border-border/60">
                 <div className="text-center">
                   <FileImage className="mx-auto size-10 text-muted-foreground" />
                   <p className="mt-3 text-sm font-medium">Asset placeholder</p>
@@ -101,12 +101,12 @@ export default async function CharacterDetailPage({
                   </p>
                 </div>
               </div>
-              <Button className="w-full" variant="outline">
+              <Button className="w-full rounded-full" variant="outline">
                 <PenTool className="size-4" />
                 View handwriting guide
               </Button>
               {character.strokeOrderReferenceUrl ? (
-                <Button asChild className="w-full" variant="outline">
+                <Button asChild className="w-full rounded-full" variant="outline">
                   <Link href={character.strokeOrderReferenceUrl}>
                     <ExternalLink className="size-4" />
                     Reference URL
@@ -118,25 +118,25 @@ export default async function CharacterDetailPage({
         </div>
       </section>
 
-      <section className="grid gap-5 lg:grid-cols-2">
-        <Card className="han-card rounded-xl">
+      <section className="grid gap-4 sm:grid-cols-2">
+        <Card>
           <CardHeader>
             <CardTitle>Example words</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
             {words.map((word) => (
-              <div key={word.id} className="rounded-xl border border-border/70 bg-white/70 p-4">
+              <div key={word.id} className="glass-subtle rounded-2xl p-4">
                 <div className="grid gap-3 sm:grid-cols-2">
-                  <p className="text-3xl font-semibold">{word.simplified}</p>
-                  <p className="text-3xl font-semibold">{word.traditional}</p>
+                  <p className="text-3xl font-semibold tracking-tight">{word.simplified}</p>
+                  <p className="text-3xl font-semibold tracking-tight">{word.traditional}</p>
                 </div>
-                <p className="mt-3 font-medium text-sky-800">{word.pinyin}</p>
-                <p className="text-sm text-muted-foreground">{word.englishMeaning}</p>
+                <p className="mt-3 font-medium text-primary">{word.pinyin}</p>
+                <p className="text-[13px] text-muted-foreground">{word.englishMeaning}</p>
               </div>
             ))}
           </CardContent>
         </Card>
-        <Card className="han-card rounded-xl">
+        <Card>
           <CardHeader>
             <CardTitle>Related notes</CardTitle>
           </CardHeader>
@@ -146,16 +146,16 @@ export default async function CharacterDetailPage({
                 <Link
                   key={note.id}
                   href={`/notes/${note.id}`}
-                  className="block rounded-xl border border-border/70 bg-white/70 p-4 transition hover:bg-white"
+                  className="glass-subtle block rounded-2xl p-4 transition hover:border-primary/40"
                 >
                   <p className="font-medium">{note.title}</p>
-                  <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">
+                  <p className="mt-1 line-clamp-2 text-[13px] text-muted-foreground">
                     {note.content}
                   </p>
                 </Link>
               ))
             ) : (
-              <p className="text-sm text-muted-foreground">
+              <p className="text-[13px] text-muted-foreground">
                 No notes are linked to this character yet.
               </p>
             )}

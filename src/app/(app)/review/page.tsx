@@ -28,9 +28,9 @@ export default function ReviewPage() {
           </Button>
         }
       />
-      <div className="grid gap-5 lg:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-3">
         {queues.map((queue) => (
-          <Card key={queue.label} className="han-card rounded-xl">
+          <Card key={queue.label}>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Repeat2 className="size-4 text-primary" />
@@ -38,36 +38,36 @@ export default function ReviewPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <p className="text-3xl font-semibold">{queue.due}</p>
-              <p className="text-sm text-muted-foreground">items due today</p>
+              <p className="text-3xl font-semibold tracking-tight">{queue.due}</p>
+              <p className="text-[13px] text-muted-foreground">items due today</p>
               <Progress value={queue.score} className="h-2" />
             </CardContent>
           </Card>
         ))}
       </div>
-      <div className="grid gap-5 lg:grid-cols-2">
-        <Card className="han-card rounded-xl">
+      <div className="grid gap-4 sm:grid-cols-2">
+        <Card>
           <CardHeader>
             <CardTitle>Weakness repair session</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
             {["了 completion", "学 / 學 recognition", "Third-tone pairs"].map((item) => (
-              <div key={item} className="flex items-center gap-3 rounded-xl bg-white/70 p-4">
-                <Brain className="size-4 text-violet-600" />
+              <div key={item} className="glass-subtle flex items-center gap-3 rounded-xl p-4">
+                <Brain className="size-4 text-primary" />
                 <span className="text-sm font-medium">{item}</span>
               </div>
             ))}
           </CardContent>
         </Card>
-        <Card className="han-card rounded-xl">
+        <Card>
           <CardHeader>
             <CardTitle>Next review timing</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
             {["2026-06-08 · 24 items", "2026-06-09 · 16 items", "2026-06-11 · 9 items"].map(
               (item) => (
-                <div key={item} className="flex items-center gap-3 rounded-xl bg-white/70 p-4">
-                  <CalendarClock className="size-4 text-sky-600" />
+                <div key={item} className="glass-subtle flex items-center gap-3 rounded-xl p-4">
+                  <CalendarClock className="size-4 text-primary" />
                   <span className="text-sm font-medium">{item}</span>
                 </div>
               )

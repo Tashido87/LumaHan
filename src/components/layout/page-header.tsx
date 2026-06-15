@@ -21,24 +21,26 @@ export function PageHeader({
   return (
     <header
       className={cn(
-        "flex flex-col gap-4 md:flex-row md:items-end md:justify-between",
+        "flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between",
         className
       )}
     >
-      <div className="max-w-3xl">
+      <div className="max-w-2xl">
         {eyebrow ? (
-          <Badge className="mb-3 rounded-md bg-primary/10 text-primary hover:bg-primary/10">
+          <Badge className="mb-2 rounded-full bg-primary/12 px-2.5 py-0.5 text-[11px] font-medium text-primary hover:bg-primary/12">
             {eyebrow}
           </Badge>
         ) : null}
-        <h1 className="text-3xl font-semibold tracking-normal text-balance md:text-4xl">
+        <h1 className="text-2xl font-semibold tracking-tight text-balance sm:text-[1.75rem]">
           {title}
         </h1>
-        <p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground md:text-base">
+        <p className="mt-1.5 max-w-xl text-[13px] leading-6 text-muted-foreground">
           {description}
         </p>
       </div>
-      {actions ? <div className="flex shrink-0 flex-wrap gap-2">{actions}</div> : null}
+      {actions ? (
+        <div className="flex shrink-0 flex-wrap gap-2">{actions}</div>
+      ) : null}
     </header>
   );
 }

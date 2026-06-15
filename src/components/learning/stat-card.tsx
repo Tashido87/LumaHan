@@ -8,15 +8,20 @@ type StatCardProps = {
   value: string;
   detail: string;
   icon: ReactNode;
+  /**
+   * Kept for API compatibility. Most metrics share a calm neutral treatment so
+   * color stays calm; only "amber" (streak / heat) gets a warm tint, since it
+   * carries genuine meaning.
+   */
   tone?: "green" | "blue" | "violet" | "amber" | "rose";
 };
 
-const toneMap = {
-  green: "bg-emerald-100 text-emerald-700",
-  blue: "bg-sky-100 text-sky-700",
-  violet: "bg-violet-100 text-violet-700",
-  amber: "bg-amber-100 text-amber-700",
-  rose: "bg-rose-100 text-rose-700",
+const iconTone = {
+  green: "bg-primary/12 text-primary",
+  blue: "bg-primary/12 text-primary",
+  violet: "bg-primary/12 text-primary",
+  amber: "bg-orange-500/12 text-orange-600",
+  rose: "bg-primary/12 text-primary",
 };
 
 export function StatCard({
@@ -27,14 +32,21 @@ export function StatCard({
   tone = "green",
 }: StatCardProps) {
   return (
-    <Card className="han-card rounded-xl">
-      <CardContent className="flex items-start justify-between gap-4 p-5">
+    <Card>
+      <CardContent className="flex items-start justify-between gap-3 p-4">
         <div className="min-w-0">
-          <p className="text-sm text-muted-foreground">{label}</p>
-          <p className="mt-2 text-2xl font-semibold tracking-normal">{value}</p>
-          <p className="mt-1 text-xs text-muted-foreground">{detail}</p>
+          <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+            {label}
+          </p>
+          <p className="mt-1.5 text-2xl font-semibold tracking-tight">{value}</p>
+          <p className="mt-0.5 text-[11px] text-muted-foreground">{detail}</p>
         </div>
-        <span className={cn("grid size-10 shrink-0 place-items-center rounded-xl", toneMap[tone])}>
+        <span
+          className={cn(
+            "grid size-9 shrink-0 place-items-center rounded-xl",
+            iconTone[tone]
+          )}
+        >
           {icon}
         </span>
       </CardContent>

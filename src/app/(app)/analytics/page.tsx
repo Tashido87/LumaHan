@@ -25,41 +25,41 @@ export default function AnalyticsPage() {
         }
       />
       <ConfusionPanel />
-      <div className="grid gap-5 xl:grid-cols-[1fr_0.9fr]">
+      <div className="grid gap-4 xl:grid-cols-[1fr_0.9fr]">
         <MasteryBars metrics={masteryMetrics} />
         <WeeklyActivityChart />
       </div>
-      <div className="grid gap-5 lg:grid-cols-2">
-        <Card className="han-card rounded-xl">
+      <div className="grid gap-4 sm:grid-cols-2">
+        <Card>
           <CardHeader>
             <CardTitle>Weak areas</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
             {weakAreas.map((area) => (
-              <div key={area} className="rounded-xl border border-border/70 bg-white/70 p-4">
+              <div key={area} className="glass-subtle rounded-2xl p-4">
                 <p className="font-medium">{area}</p>
-                <p className="mt-1 text-sm text-muted-foreground">
+                <p className="mt-1 text-[13px] text-muted-foreground">
                   Recommended for the next adaptive session.
                 </p>
               </div>
             ))}
           </CardContent>
         </Card>
-        <Card className="han-card rounded-xl">
+        <Card>
           <CardHeader>
             <CardTitle>Recommended next session</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5">
-              <p className="text-sm text-emerald-900/70">Session type</p>
-              <p className="mt-2 text-2xl font-semibold text-emerald-950">
+            <div className="glass-subtle rounded-2xl p-5">
+              <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">Session type</p>
+              <p className="mt-1.5 text-2xl font-semibold tracking-tight">
                 Weakness repair
               </p>
-              <p className="mt-2 text-sm leading-6 text-emerald-900/75">
+              <p className="mt-1.5 text-[13px] leading-6 text-muted-foreground">
                 Easy review for tone pairs, followed by one grammar correction set.
               </p>
             </div>
-            <Button className="w-full">
+            <Button className="w-full rounded-full">
               Start recommendation
               <ArrowRight className="size-4" />
             </Button>
