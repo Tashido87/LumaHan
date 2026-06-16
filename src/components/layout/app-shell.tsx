@@ -126,7 +126,7 @@ function ProfileChip() {
       .toUpperCase() || "PL";
 
   return (
-    <div className="glass-subtle rounded-2xl p-3">
+    <div className="glass-subtle rounded-xl p-2.5">
       <div className="flex items-center gap-3">
         <Avatar className="size-9 border border-white/70">
           {profile?.photoURL && (
@@ -158,7 +158,7 @@ function ProfileChip() {
 function FloatingRail({ pathname }: { pathname: string }) {
   return (
     <div className="fixed left-4 top-4 z-40 hidden xl:flex">
-      <div className="glass flex max-h-[calc(100dvh-2rem)] w-60 flex-col gap-3 rounded-3xl p-3">
+      <div className="glass flex max-h-[calc(100dvh-2rem)] w-56 flex-col gap-2 rounded-2xl p-2.5">
         <div className="px-1.5 pt-1">
           <BrandMark />
         </div>
@@ -181,7 +181,7 @@ function ScrollRailItems({ pathname }: { pathname: string }) {
             key={item.href}
             href={item.href}
             className={cn(
-              "relative flex h-9 items-center gap-3 rounded-xl px-2.5 text-[13px] font-medium transition-colors",
+              "relative flex h-8 items-center gap-2.5 rounded-lg px-2.5 text-[12.5px] font-medium transition-colors",
               active
                 ? "text-primary-foreground"
                 : "text-muted-foreground hover:text-foreground"
@@ -269,14 +269,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <FloatingRail pathname={pathname} />
       <MobileTopBar pathname={pathname} />
 
-      <main className="px-4 pb-12 pt-5 sm:px-6 xl:pl-[17rem] xl:pr-6">
+      <main className="px-4 pb-8 pt-4 sm:px-6 xl:pl-[16.5rem] xl:pr-5">
         {/* Focused content column for a compact, premium feel. */}
         <motion.div
           key={pathname}
           initial={{ opacity: 0, y: 6 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
-          className="mx-auto flex w-full max-w-3xl flex-col gap-5"
+          className="mx-auto flex w-full max-w-6xl flex-col gap-3"
         >
           {children}
         </motion.div>

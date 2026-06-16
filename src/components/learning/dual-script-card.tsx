@@ -2,69 +2,54 @@ import { Headphones, NotebookPen, Sparkles } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import type { VocabularyItem } from "@/types/learning";
 
 export function DualScriptCard({ item }: { item: VocabularyItem }) {
   return (
-    <Card>
-      <CardHeader className="gap-3">
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <CardTitle className="text-base">{item.englishMeaning}</CardTitle>
-            <p className="mt-1 text-[13px] text-muted-foreground">
-              {item.partOfSpeech}
-            </p>
+    <Card className="group">
+      <CardContent className="flex items-center gap-4 p-3">
+        {/* Chinese characters - compact side by side */}
+        <div className="flex items-center gap-3 shrink-0">
+          <div className="glass-subtle rounded-lg px-3 py-2 text-center min-w-[3.5rem]">
+            <p className="text-2xl font-semibold leading-tight">{item.simplified}</p>
+            <p className="text-[9px] uppercase text-muted-foreground mt-0.5">简</p>
           </div>
-          <div className="flex flex-wrap justify-end gap-1">
-            <Badge variant="secondary" className="rounded-full text-[11px]">
+          {item.simplified !== item.traditional && (
+            <div className="glass-subtle rounded-lg px-3 py-2 text-center min-w-[3.5rem]">
+              <p className="text-2xl font-semibold leading-tight">{item.traditional}</p>
+              <p className="text-[9px] uppercase text-muted-foreground mt-0.5">繁</p>
+            </div>
+          )}
+        </div>
+
+        {/* Info */}
+        <div className="min-w-0 flex-1">
+          <div className="flex items-baseline gap-2">
+            <p className="text-sm font-semibold text-primary">{item.pinyin}</p>
+            <Badge variant="secondary" className="rounded-full text-[10px] px-1.5 py-0">
               HSK {item.hskLevel}
             </Badge>
-            {item.beyondCurrentLevel ? (
-              <Badge className="rounded-full bg-orange-500/12 text-orange-600 hover:bg-orange-500/12 text-[11px]">
-                Extra vocabulary
+            {item.beyondCurrentLevel && (
+              <Badge className="rounded-full bg-orange-500/12 text-orange-600 hover:bg-orange-500/12 text-[10px] px-1.5 py-0">
+                Extra
               </Badge>
-            ) : null}
+            )}
           </div>
+          <p className="text-[13px] mt-0.5 truncate">{item.englishMeaning}</p>
+          <p className="text-[11px] text-muted-foreground truncate mt-0.5">{item.partOfSpeech} · {item.tags.slice(0, 3).join(" · ")}</p>
         </div>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="grid gap-3 sm:grid-cols-2">
-          <div className="glass-subtle rounded-2xl p-4">
-            <p className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
-              Simplified
-            </p>
-            <p className="mt-2 break-words text-5xl font-semibold leading-none tracking-tight">
-              {item.simplified}
-            </p>
-          </div>
-          <div className="glass-subtle rounded-2xl p-4">
-            <p className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
-              Traditional
-            </p>
-            <p className="mt-2 break-words text-5xl font-semibold leading-none tracking-tight">
-              {item.traditional}
-            </p>
-          </div>
-        </div>
-        <div>
-          <p className="text-lg font-medium text-primary">{item.pinyin}</p>
-          <p className="mt-1 text-[13px] text-muted-foreground">
-            {item.tags.join(" · ")}
-          </p>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          <Button size="sm" variant="outline" className="rounded-full">
-            <Headphones className="size-4" />
-            Play
+
+        {/* Actions */}
+        <div className="flex items-center gap-1 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+          <Button size="icon-sm" variant="ghost" className="size-7 rounded-md">
+            <Headphones className="size-3.5" />
           </Button>
-          <Button size="sm" variant="outline" className="rounded-full">
-            <Sparkles className="size-4" />
-            Ask AI
+          <Button size="icon-sm" variant="ghost" className="size-7 rounded-md">
+            <Sparkles className="size-3.5" />
           </Button>
-          <Button size="sm" variant="outline" className="rounded-full">
-            <NotebookPen className="size-4" />
-            Save
+          <Button size="icon-sm" variant="ghost" className="size-7 rounded-md">
+            <NotebookPen className="size-3.5" />
           </Button>
         </div>
       </CardContent>

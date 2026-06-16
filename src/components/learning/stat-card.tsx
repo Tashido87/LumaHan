@@ -33,17 +33,17 @@ export function StatCard({
 }: StatCardProps) {
   return (
     <Card>
-      <CardContent className="flex items-start justify-between gap-3 p-4">
+      <CardContent className="flex items-start justify-between gap-2 p-3">
         <div className="min-w-0">
-          <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+          <p className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
             {label}
           </p>
-          <p className="mt-1.5 text-2xl font-semibold tracking-tight">{value}</p>
-          <p className="mt-0.5 text-[11px] text-muted-foreground">{detail}</p>
+          <p className="mt-1 text-lg font-semibold tracking-tight">{value}</p>
+          <p className="text-[10px] text-muted-foreground">{detail}</p>
         </div>
         <span
           className={cn(
-            "grid size-9 shrink-0 place-items-center rounded-xl",
+            "grid size-8 shrink-0 place-items-center rounded-lg",
             iconTone[tone]
           )}
         >

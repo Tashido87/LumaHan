@@ -229,36 +229,36 @@ export default function LessonPage() {
         }
       />
 
-      <section className="grid gap-3 sm:grid-cols-3">
+      <section className="grid gap-2 grid-cols-3">
         <Card>
-          <CardContent className="p-5">
-            <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">Estimated time</p>
-            <p className="mt-2 text-3xl font-semibold tracking-tight">{lesson.estimatedMinutes} min</p>
+          <CardContent className="p-3">
+            <p className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">Estimated time</p>
+            <p className="mt-1 text-xl font-semibold tracking-tight">{lesson.estimatedMinutes} min</p>
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="p-5">
-            <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">Lesson XP</p>
-            <p className="mt-2 text-3xl font-semibold tracking-tight">{lesson.xp || 10}</p>
+          <CardContent className="p-3">
+            <p className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">Lesson XP</p>
+            <p className="mt-1 text-xl font-semibold tracking-tight">{lesson.xp || 10}</p>
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="p-5">
-            <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">Completion</p>
-            <p className="mt-2 text-3xl font-semibold tracking-tight">{lesson.completion || 0}%</p>
+          <CardContent className="p-3">
+            <p className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">Completion</p>
+            <p className="mt-1 text-xl font-semibold tracking-tight">{lesson.completion || 0}%</p>
           </CardContent>
         </Card>
       </section>
 
       {vocabulary.length > 0 && (
-        <section className="space-y-4">
+        <section className="space-y-2">
           <div className="flex items-center justify-between gap-3">
-            <h2 className="text-xl font-semibold tracking-tight">Vocabulary</h2>
-            <Badge variant="secondary" className="rounded-full text-[11px]">
+            <h2 className="text-base font-semibold tracking-tight">Vocabulary</h2>
+            <Badge variant="secondary" className="rounded-full text-[10px]">
               {vocabulary.length} cards
             </Badge>
           </div>
-          <div className="grid gap-4 xl:grid-cols-2">
+          <div className="grid gap-2 lg:grid-cols-2 2xl:grid-cols-3">
             {vocabulary.map((item) => (
               <DualScriptCard key={item.id} item={item} />
             ))}
@@ -267,30 +267,26 @@ export default function LessonPage() {
       )}
 
       {(grammarPoints.length > 0 || characters.length > 0) && (
-        <section className="grid gap-4 lg:grid-cols-2">
+        <section className="grid gap-2 lg:grid-cols-2">
           {grammarPoints.length > 0 && (
-            <div className="space-y-4">
-              <h2 className="text-xl font-semibold tracking-tight">Grammar</h2>
+            <div className="space-y-2">
+              <h2 className="text-base font-semibold tracking-tight">Grammar</h2>
               {grammarPoints.map((point) => (
                 <Card key={point.id}>
-                  <CardHeader>
-                    <CardTitle>{point.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <Badge variant="outline" className="rounded-full text-[11px]">
-                      {point.pattern}
-                    </Badge>
-                    <p className="text-[13px] leading-6 text-muted-foreground">
+                  <CardContent className="space-y-2 p-3">
+                    <div className="flex items-center gap-2">
+                      <p className="text-sm font-semibold">{point.title}</p>
+                      <Badge variant="outline" className="rounded-full text-[10px] px-1.5 py-0">
+                        {point.pattern}
+                      </Badge>
+                    </div>
+                    <p className="text-[12.5px] leading-5 text-muted-foreground">
                       {point.explanation}
                     </p>
                     {point.commonMistakes && point.commonMistakes.length > 0 ? (
-                      <div className="glass-subtle rounded-2xl p-4">
-                        <p className="text-sm font-medium text-orange-700">
-                          Common mistake
-                        </p>
-                        <p className="mt-1 text-[13px] text-muted-foreground">
-                          {point.commonMistakes[0]}
-                        </p>
+                      <div className="glass-subtle rounded-lg p-2.5">
+                        <p className="text-[11px] font-medium text-orange-700">Common mistake</p>
+                        <p className="mt-0.5 text-[12px] text-muted-foreground">{point.commonMistakes[0]}</p>
                       </div>
                     ) : null}
                   </CardContent>
@@ -300,43 +296,33 @@ export default function LessonPage() {
           )}
 
           {characters.length > 0 && (
-            <div className="space-y-4">
-              <h2 className="text-xl font-semibold tracking-tight">Characters</h2>
+            <div className="space-y-2">
+              <h2 className="text-base font-semibold tracking-tight">Characters</h2>
               {characters.map((character) => (
-                <Card key={character.id}>
-                  <CardContent className="flex flex-col gap-4 p-5 md:flex-row md:items-center md:justify-between">
-                    <div className="grid grid-cols-2 gap-3">
-                      <div className="glass-subtle rounded-2xl p-4">
-                        <p className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
-                          Simplified
-                        </p>
-                        <p className="mt-2 text-5xl font-semibold tracking-tight">
-                          {character.simplified}
-                        </p>
+                <Card key={character.id} className="group">
+                  <CardContent className="flex items-center gap-3 p-3">
+                    <div className="flex items-center gap-2 shrink-0">
+                      <div className="glass-subtle rounded-lg px-2.5 py-1.5 text-center min-w-[3rem]">
+                        <p className="text-2xl font-semibold leading-tight">{character.simplified}</p>
+                        <p className="text-[8px] uppercase text-muted-foreground">简</p>
                       </div>
-                      <div className="glass-subtle rounded-2xl p-4">
-                        <p className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
-                          Traditional
-                        </p>
-                        <p className="mt-2 text-5xl font-semibold tracking-tight">
-                          {character.traditional}
-                        </p>
-                      </div>
+                      {character.simplified !== character.traditional && (
+                        <div className="glass-subtle rounded-lg px-2.5 py-1.5 text-center min-w-[3rem]">
+                          <p className="text-2xl font-semibold leading-tight">{character.traditional}</p>
+                          <p className="text-[8px] uppercase text-muted-foreground">繁</p>
+                        </div>
+                      )}
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="text-lg font-medium text-primary">
-                        {character.pinyin}
-                      </p>
-                      <p className="text-[13px] text-muted-foreground">
-                        {character.meaning}
-                      </p>
-                      <Button asChild className="mt-3 rounded-full" size="sm" variant="outline">
-                        <Link href={`/characters/${character.id}`}>
-                          <PenLine className="size-4" />
-                          Details
-                        </Link>
-                      </Button>
+                      <p className="text-sm font-medium text-primary">{character.pinyin}</p>
+                      <p className="text-[12.5px] text-muted-foreground truncate">{character.meaning}</p>
                     </div>
+                    <Button asChild className="rounded-full shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" size="sm" variant="outline">
+                      <Link href={`/characters/${character.id}`}>
+                        <PenLine className="size-3.5" />
+                        Details
+                      </Link>
+                    </Button>
                   </CardContent>
                 </Card>
               ))}
@@ -346,50 +332,31 @@ export default function LessonPage() {
       )}
 
       {exampleSentences.length > 0 && (
-        <section className="space-y-4">
-          <h2 className="text-xl font-semibold tracking-tight">Example sentences</h2>
-          <div className="grid gap-4 lg:grid-cols-2">
+        <section className="space-y-2">
+          <h2 className="text-base font-semibold tracking-tight">Example sentences</h2>
+          <div className="grid gap-2 lg:grid-cols-2">
             {exampleSentences.map((sentence) => (
-              <Card key={sentence.id}>
-                <CardContent className="space-y-4 p-5">
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    <div className="glass-subtle rounded-2xl p-4">
-                      <p className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
-                        Simplified
-                      </p>
-                      <p className="mt-2 text-2xl font-semibold tracking-tight">
-                        {sentence.simplified}
-                      </p>
-                    </div>
-                    <div className="glass-subtle rounded-2xl p-4">
-                      <p className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
-                        Traditional
-                      </p>
-                      <p className="mt-2 text-2xl font-semibold tracking-tight">
-                        {sentence.traditional}
-                      </p>
-                    </div>
+              <Card key={sentence.id} className="group">
+                <CardContent className="flex items-start gap-3 p-3">
+                  <div className="shrink-0">
+                    <p className="text-lg font-semibold leading-tight">{sentence.simplified}</p>
+                    {sentence.simplified !== sentence.traditional && (
+                      <p className="text-sm text-muted-foreground mt-0.5">{sentence.traditional}</p>
+                    )}
                   </div>
-                  <div>
-                    <p className="font-medium text-primary">{sentence.pinyin}</p>
-                    <p className="mt-1 text-[13px] text-muted-foreground">
-                      {sentence.englishTranslation}
-                    </p>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-[12.5px] font-medium text-primary">{sentence.pinyin}</p>
+                    <p className="text-[12px] text-muted-foreground mt-0.5">{sentence.englishTranslation}</p>
                   </div>
-                  <div className="flex flex-wrap gap-2">
-                    <Button size="sm" variant="outline" className="rounded-full">
-                      <Headphones className="size-4" />
-                      Audio
+                  <div className="flex items-center gap-1 shrink-0">
+                    <Button size="icon-sm" variant="ghost" className="size-7 rounded-md opacity-0 group-hover:opacity-100 transition-opacity">
+                      <Headphones className="size-3.5" />
                     </Button>
                     {sentence.beyondCurrentLevel ? (
-                      <Badge className="rounded-full bg-orange-500/12 text-orange-600 hover:bg-orange-500/12 text-[11px]">
-                        Beyond current level
+                      <Badge className="rounded-full bg-orange-500/12 text-orange-600 hover:bg-orange-500/12 text-[9px] px-1.5 py-0">
+                        Extra
                       </Badge>
-                    ) : (
-                      <Badge variant="secondary" className="rounded-full text-[11px]">
-                        Curated
-                      </Badge>
-                    )}
+                    ) : null}
                   </div>
                 </CardContent>
               </Card>
@@ -399,19 +366,14 @@ export default function LessonPage() {
       )}
 
       <Card>
-        <CardContent className="flex flex-col gap-4 p-5 md:flex-row md:items-center md:justify-between">
-          <div>
-            <div className="flex items-center gap-2">
-              <Sparkles className="size-4 text-primary" />
-              <h2 className="font-semibold">AI enhancement boundary</h2>
-            </div>
-            <p className="mt-2 text-[13px] leading-6 text-muted-foreground">
-              Curated HSK content remains the source of truth. AI additions are
-              marked, structured, and reviewable by admin.
-            </p>
+        <CardContent className="flex items-center gap-3 p-3">
+          <Sparkles className="size-4 text-primary shrink-0" />
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-semibold">AI enhancement boundary</p>
+            <p className="text-[12px] text-muted-foreground">Curated HSK content is source of truth. AI additions are marked and reviewable.</p>
           </div>
-          <Button asChild variant="outline" className="rounded-full">
-            <Link href="/ai-tutor">Open AI tutor</Link>
+          <Button asChild variant="outline" size="sm" className="rounded-full shrink-0">
+            <Link href="/ai-tutor">AI tutor</Link>
           </Button>
         </CardContent>
       </Card>
