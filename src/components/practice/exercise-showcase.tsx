@@ -33,39 +33,39 @@ export function ExerciseShowcase() {
   const exerciseTypes = Object.entries(exerciseLabels);
 
   return (
-    <div className="grid gap-5 xl:grid-cols-[1fr_22rem]">
-      <div className="space-y-5">
+    <div className="grid gap-4 xl:grid-cols-[1fr_22rem]">
+      <div className="space-y-4">
         {practiceExercises.map((exercise) => (
-          <Card key={exercise.id} className="han-card rounded-xl">
+          <Card key={exercise.id}>
             <CardHeader className="gap-3">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <CardTitle className="text-lg">{exerciseLabels[exercise.type]}</CardTitle>
-                <Badge variant="secondary" className="rounded-md">
+                <Badge variant="secondary" className="rounded-full text-[11px]">
                   HSK {exercise.hskLevel} · {exercise.difficulty}
                 </Badge>
               </div>
-              <p className="text-sm text-muted-foreground">{exercise.prompt}</p>
+              <p className="text-[13px] text-muted-foreground">{exercise.prompt}</p>
             </CardHeader>
             <CardContent className="space-y-4">
               {exercise.simplified || exercise.traditional ? (
                 <div className="grid gap-3 sm:grid-cols-2">
-                  <div className="rounded-xl border border-border/70 bg-white/70 p-4">
-                    <p className="text-xs font-medium uppercase text-muted-foreground">
+                  <div className="glass-subtle rounded-2xl p-4">
+                    <p className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
                       Simplified
                     </p>
-                    <p className="mt-2 text-3xl font-semibold">{exercise.simplified}</p>
+                    <p className="mt-2 text-3xl font-semibold tracking-tight">{exercise.simplified}</p>
                   </div>
-                  <div className="rounded-xl border border-border/70 bg-white/70 p-4">
-                    <p className="text-xs font-medium uppercase text-muted-foreground">
+                  <div className="glass-subtle rounded-2xl p-4">
+                    <p className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
                       Traditional
                     </p>
-                    <p className="mt-2 text-3xl font-semibold">{exercise.traditional}</p>
+                    <p className="mt-2 text-3xl font-semibold tracking-tight">{exercise.traditional}</p>
                   </div>
                 </div>
               ) : null}
 
               {exercise.pinyin ? (
-                <p className="text-lg font-medium text-sky-800">{exercise.pinyin}</p>
+                <p className="text-lg font-medium text-primary">{exercise.pinyin}</p>
               ) : null}
 
               {exercise.choices ? (
@@ -74,10 +74,10 @@ export function ExerciseShowcase() {
                     <Button
                       key={choice}
                       variant={choice === exercise.correctAnswer ? "secondary" : "outline"}
-                      className="justify-start"
+                      className="justify-start rounded-xl"
                     >
                       {choice === exercise.correctAnswer ? (
-                        <CheckCircle2 className="size-4 text-emerald-600" />
+                        <CheckCircle2 className="size-4 text-primary" />
                       ) : (
                         <Puzzle className="size-4" />
                       )}
@@ -89,11 +89,11 @@ export function ExerciseShowcase() {
 
               {exercise.type === "speaking" ? (
                 <div className="flex flex-wrap gap-2">
-                  <Button>
+                  <Button className="rounded-full">
                     <Mic className="size-4" />
                     Record
                   </Button>
-                  <Button variant="outline">
+                  <Button variant="outline" className="rounded-full">
                     <Headphones className="size-4" />
                     Listen
                   </Button>
@@ -105,7 +105,7 @@ export function ExerciseShowcase() {
               ) : null}
 
               <Separator />
-              <p className="text-sm leading-6 text-muted-foreground">
+              <p className="text-[13px] leading-6 text-muted-foreground">
                 {exercise.explanation}
               </p>
             </CardContent>
@@ -113,7 +113,7 @@ export function ExerciseShowcase() {
         ))}
       </div>
 
-      <Card className="han-card rounded-xl">
+      <Card>
         <CardHeader>
           <CardTitle>Exercise coverage</CardTitle>
         </CardHeader>
@@ -121,9 +121,9 @@ export function ExerciseShowcase() {
           {exerciseTypes.map(([type, label]) => (
             <div
               key={type}
-              className="flex items-center gap-3 rounded-lg border border-border/70 bg-white/60 p-3 text-sm"
+              className="glass-subtle flex items-center gap-3 rounded-xl p-3 text-[13px]"
             >
-              <span className="grid size-8 place-items-center rounded-lg bg-secondary text-secondary-foreground">
+              <span className="grid size-8 place-items-center rounded-lg bg-primary/12 text-primary">
                 {type.includes("listening") ? (
                   <Headphones className="size-4" />
                 ) : type.includes("type") ? (

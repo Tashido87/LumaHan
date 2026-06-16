@@ -19,52 +19,52 @@ import type { StudyNote } from "@/types/learning";
 
 function NoteCard({ note }: { note: StudyNote }) {
   return (
-    <Card className="han-card rounded-xl">
+    <Card>
       <CardHeader className="gap-3">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
             <CardTitle className="truncate text-base">{note.title}</CardTitle>
-            <p className="mt-1 text-xs text-muted-foreground">
+            <p className="mt-1 text-[11px] text-muted-foreground">
               Updated {new Intl.DateTimeFormat("en", { dateStyle: "medium" }).format(new Date(note.updatedAt))}
             </p>
           </div>
           {note.pinned ? (
-            <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-amber-100 text-amber-700">
+            <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-orange-500/12 text-orange-600">
               <Pin className="size-4" />
             </span>
           ) : null}
         </div>
         <div className="flex flex-wrap gap-1">
-          <Badge variant="secondary" className="rounded-md">
+          <Badge variant="secondary" className="rounded-full text-[11px]">
             HSK {note.hskLevel}
           </Badge>
-          <Badge className="rounded-md bg-sky-100 text-sky-700 hover:bg-sky-100">
+          <Badge className="rounded-full bg-primary/12 text-primary hover:bg-primary/12 text-[11px]">
             {note.linkedType}
           </Badge>
-          <Badge variant="outline" className="rounded-md">
+          <Badge variant="outline" className="rounded-full text-[11px]">
             {note.source}
           </Badge>
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
-        <p className="line-clamp-5 whitespace-pre-line text-sm leading-6 text-muted-foreground">
+        <p className="line-clamp-5 whitespace-pre-line text-[13px] leading-6 text-muted-foreground">
           {note.content}
         </p>
         <div className="flex flex-wrap gap-1">
           {note.tags.map((tag) => (
-            <Badge key={tag} variant="outline" className="rounded-md">
+            <Badge key={tag} variant="outline" className="rounded-full text-[11px]">
               {tag}
             </Badge>
           ))}
         </div>
         <div className="flex flex-wrap gap-2">
-          <Button asChild size="sm">
+          <Button asChild size="sm" className="rounded-full">
             <Link href={`/notes/${note.id}`}>
               <Edit3 className="size-4" />
               Edit
             </Link>
           </Button>
-          <Button size="sm" variant="outline">
+          <Button size="sm" variant="outline" className="rounded-full">
             <Trash2 className="size-4" />
             Delete
           </Button>
@@ -76,8 +76,8 @@ function NoteCard({ note }: { note: StudyNote }) {
 
 export function NotesBoard() {
   return (
-    <div className="grid gap-5 xl:grid-cols-[20rem_1fr]">
-      <Card className="han-card rounded-xl">
+    <div className="grid gap-4 xl:grid-cols-[20rem_1fr]">
+      <Card>
         <CardHeader>
           <CardTitle>Filters</CardTitle>
         </CardHeader>
@@ -121,11 +121,11 @@ export function NotesBoard() {
               </SelectContent>
             </Select>
           </div>
-          <Button className="w-full">
+          <Button className="w-full rounded-full">
             <Plus className="size-4" />
             New note
           </Button>
-          <Button className="w-full" variant="outline">
+          <Button className="w-full rounded-full" variant="outline">
             <Filter className="size-4" />
             Pinned first
           </Button>
@@ -143,8 +143,8 @@ export function NotesBoard() {
 
 export function NoteEditor({ note }: { note: StudyNote }) {
   return (
-    <div className="grid gap-5 xl:grid-cols-[1fr_20rem]">
-      <Card className="han-card rounded-xl">
+    <div className="grid gap-4 xl:grid-cols-[1fr_20rem]">
+      <Card>
         <CardHeader>
           <CardTitle>Edit note</CardTitle>
         </CardHeader>
@@ -199,33 +199,33 @@ export function NoteEditor({ note }: { note: StudyNote }) {
             <Input id="note-tags" defaultValue={note.tags.join(", ")} />
           </div>
           <div className="flex flex-wrap gap-2">
-            <Button>
+            <Button className="rounded-full">
               <Edit3 className="size-4" />
               Save changes
             </Button>
-            <Button variant="outline">Preview</Button>
+            <Button variant="outline" className="rounded-full">Preview</Button>
           </div>
         </CardContent>
       </Card>
-      <Card className="han-card rounded-xl">
+      <Card>
         <CardHeader>
           <CardTitle>Linked learning item</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="rounded-xl border border-border/70 bg-white/70 p-4">
-            <p className="text-xs font-medium uppercase text-muted-foreground">
+          <div className="glass-subtle rounded-2xl p-4">
+            <p className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
               Link
             </p>
-            <p className="mt-2 text-sm font-medium">{note.linkedType}</p>
-            <p className="text-sm text-muted-foreground">{note.linkedId ?? "none"}</p>
+            <p className="mt-1.5 text-sm font-medium">{note.linkedType}</p>
+            <p className="text-[13px] text-muted-foreground">{note.linkedId ?? "none"}</p>
           </div>
-          <div className="rounded-xl border border-border/70 bg-white/70 p-4">
-            <p className="text-xs font-medium uppercase text-muted-foreground">
+          <div className="glass-subtle rounded-2xl p-4">
+            <p className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
               Source
             </p>
-            <p className="mt-2 text-sm font-medium">{note.source}</p>
+            <p className="mt-1.5 text-sm font-medium">{note.source}</p>
           </div>
-          <Button variant="outline" className="w-full">
+          <Button variant="outline" className="w-full rounded-full">
             Save AI answer as note
           </Button>
         </CardContent>

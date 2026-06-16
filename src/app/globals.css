@@ -127,15 +127,17 @@
     @apply border-border outline-ring/50;
   }
 
-  /* The aurora: three softly-blurred radial color wells that sit behind every
-     glass surface. The blur has something to refract, so the glass reads. */
+  /* One calm, static mesh gradient behind everything. No competing animated
+     layer in the app — premium surfaces stay still. (The landing keeps its own
+     aurora for hero energy.) Subtle so glass panels have color to sit on
+     without turning the page into a rainbow. */
   body {
     @apply bg-background text-foreground;
     background-color: var(--background);
     background-image:
-      radial-gradient(60rem 60rem at 8% -8%, oklch(0.86 0.13 158 / 0.55), transparent 60%),
-      radial-gradient(52rem 52rem at 108% 12%, oklch(0.82 0.11 210 / 0.42), transparent 60%),
-      radial-gradient(60rem 60rem at 50% 118%, oklch(0.86 0.12 130 / 0.4), transparent 62%);
+      radial-gradient(58rem 58rem at 0% 0%, oklch(0.88 0.1 158 / 0.32), transparent 62%),
+      radial-gradient(50rem 50rem at 100% 8%, oklch(0.86 0.09 210 / 0.26), transparent 60%),
+      radial-gradient(54rem 54rem at 50% 112%, oklch(0.88 0.08 130 / 0.24), transparent 62%);
     background-attachment: fixed;
     min-height: 100dvh;
   }
@@ -150,7 +152,7 @@
     color: var(--foreground);
   }
 
-  /* Respect reduced-motion users — the aurora and any transforms stay still. */
+  /* Respect reduced-motion users. */
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -163,7 +165,7 @@
 }
 
 @layer utilities {
-  /* Animated aurora layer used on the landing + app body for refractive depth. */
+  /* Animated aurora layer — landing only, for hero depth. Not used in the app. */
   .aurora-layer {
     position: fixed;
     inset: 0;
@@ -175,10 +177,10 @@
   .aurora-blob {
     position: absolute;
     border-radius: 50%;
-    filter: blur(70px);
+    filter: blur(80px);
     opacity: 0.7;
     will-change: transform;
-    animation: aurora-drift 22s ease-in-out infinite alternate;
+    animation: aurora-drift 24s ease-in-out infinite alternate;
   }
 
   @keyframes aurora-drift {
@@ -189,59 +191,60 @@
 }
 
 /*
- * Glass materials as Tailwind v4 @utility so they can be used both as plain
- * classes (glass) and via @apply in components. Registered with @utility so
- * the class is generated on-demand and is apply-able.
+ * GLASS HIERARCHY — the key to not looking muddy:
+ *  - .glass      = OUTER container only. Heavy fill for legible text, real blur,
+ *                  a single soft highlight on the rim. One per cluster.
+ *  - .glass-subtle = FLAT inset surface. NO backdrop-blur (stacking blurs = mud).
+ *                    Just a calm fill + hairline border for sub-panels inside a card.
+ *  - .glass-pill = active-state capsule for nav.
+ * Never nest two blurred surfaces.
  */
 @utility glass {
-  background: color-mix(in oklch, var(--card) 56%, transparent);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border: 1px solid color-mix(in oklch, white 60%, transparent);
+  background: color-mix(in oklch, var(--card) 72%, transparent);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid color-mix(in oklch, white 55%, transparent);
   box-shadow:
-    inset 0 1px 0 0 color-mix(in oklch, white 80%, transparent),
-    inset 0 0 0 1px color-mix(in oklch, white 12%, transparent),
-    0 1px 2px 0 oklch(0.2 0.04 165 / 0.08),
-    0 12px 32px -12px oklch(0.2 0.04 165 / 0.2);
+    inset 0 1px 0 0 color-mix(in oklch, white 70%, transparent),
+    0 1px 2px 0 oklch(0.2 0.04 165 / 0.06),
+    0 14px 36px -16px oklch(0.2 0.04 165 / 0.18);
 }
 
+/* Intentionally NOT blurred — used as insets inside glass cards and as nav
+   chrome. Flat fill keeps contrast crisp and avoids the blur-stack mud. */
 @utility glass-subtle {
-  background: color-mix(in oklch, var(--card) 38%, transparent);
-  backdrop-filter: blur(18px) saturate(160%);
-  -webkit-backdrop-filter: blur(18px) saturate(160%);
-  border: 1px solid color-mix(in oklch, white 40%, transparent);
-  box-shadow: inset 0 1px 0 0 color-mix(in oklch, white 55%, transparent);
+  background: color-mix(in oklch, var(--muted) 55%, transparent);
+  border: 1px solid color-mix(in oklch, var(--border) 75%, transparent);
 }
 
 @utility glass-pill {
-  background: color-mix(in oklch, var(--primary) 26%, transparent);
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  border: 1px solid color-mix(in oklch, var(--primary) 45%, transparent);
+  background: color-mix(in oklch, var(--primary) 24%, transparent);
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  border: 1px solid color-mix(in oklch, var(--primary) 40%, transparent);
   box-shadow:
-    inset 0 1px 0 0 color-mix(in oklch, white 50%, transparent),
-    0 8px 20px -8px color-mix(in oklch, var(--primary) 60%, transparent);
+    inset 0 1px 0 0 color-mix(in oklch, white 45%, transparent),
+    0 6px 18px -8px color-mix(in oklch, var(--primary) 55%, transparent);
 }
 
 /* Dark-mode tints layered on top of the glass utilities. */
 .dark .glass {
-  border: 1px solid color-mix(in oklch, white 14%, transparent);
+  border: 1px solid color-mix(in oklch, white 12%, transparent);
   box-shadow:
-    inset 0 1px 0 0 color-mix(in oklch, white 16%, transparent),
-    inset 0 0 0 1px color-mix(in oklch, white 4%, transparent),
+    inset 0 1px 0 0 color-mix(in oklch, white 14%, transparent),
     0 1px 2px 0 oklch(0 0 0 / 0.4),
     0 16px 40px -16px oklch(0 0 0 / 0.6);
 }
 
 .dark .glass-subtle {
+  background: color-mix(in oklch, white 6%, transparent);
   border: 1px solid color-mix(in oklch, white 10%, transparent);
-  box-shadow: inset 0 1px 0 0 color-mix(in oklch, white 8%, transparent);
 }
 
 @layer utilities {
   /* Brand wordmark gradient — jade → soft cyan, used sparingly. */
   .han-gradient-text {
-    background: linear-gradient(110deg, oklch(0.58 0.16 158), oklch(0.66 0.12 195));
+    background: linear-gradient(110deg, oklch(0.55 0.16 158), oklch(0.62 0.12 195));
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -254,24 +257,21 @@
     background-size: 32px 32px;
   }
 
-  /* Legacy aliases: emit the same declarations directly (not via @apply) so
-     existing pages keep working without touching every usage. */
+  /* Legacy aliases kept for any remaining usages — route to the corrected
+     materials. Emitted directly (not via @apply). */
   .han-card {
-    background: color-mix(in oklch, var(--card) 56%, transparent);
-    backdrop-filter: blur(24px) saturate(180%);
-    -webkit-backdrop-filter: blur(24px) saturate(180%);
-    border: 1px solid color-mix(in oklch, white 60%, transparent);
+    background: color-mix(in oklch, var(--card) 72%, transparent);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid color-mix(in oklch, white 55%, transparent);
     box-shadow:
-      inset 0 1px 0 0 color-mix(in oklch, white 80%, transparent),
-      0 12px 32px -12px oklch(0.2 0.04 165 / 0.2);
+      inset 0 1px 0 0 color-mix(in oklch, white 70%, transparent),
+      0 14px 36px -16px oklch(0.2 0.04 165 / 0.18);
     border-radius: 1rem;
   }
 
   .han-surface {
-    background: color-mix(in oklch, var(--card) 38%, transparent);
-    backdrop-filter: blur(18px) saturate(160%);
-    -webkit-backdrop-filter: blur(18px) saturate(160%);
-    border: 1px solid color-mix(in oklch, white 40%, transparent);
-    box-shadow: inset 0 1px 0 0 color-mix(in oklch, white 55%, transparent);
+    background: color-mix(in oklch, var(--muted) 55%, transparent);
+    border: 1px solid color-mix(in oklch, var(--border) 75%, transparent);
   }
 }

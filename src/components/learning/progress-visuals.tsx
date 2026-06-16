@@ -79,7 +79,7 @@ export function WeeklyActivityChart({ xpValues }: { xpValues?: number[] }) {
                   <div className="flex h-32 w-full items-end rounded-lg bg-muted/50 p-1">
                     <div
                       className={cn(
-                        "w-full rounded-md flex items-center justify-center text-[10px] font-semibold text-primary-foreground transition-all duration-300",
+                        "w-full rounded-lg flex items-center justify-center text-[10px] font-semibold text-primary-foreground transition-all duration-300",
                         barTone[i % barTone.length]
                       )}
                       style={{

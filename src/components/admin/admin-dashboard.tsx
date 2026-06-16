@@ -108,47 +108,47 @@ export function AdminDashboard() {
     }
   };
   return (
-    <div className="space-y-5">
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+    <div className="space-y-4">
+      <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-5">
         {adminHealthChecks.map((check) => (
-          <Card key={check.label} className="han-card rounded-xl">
+          <Card key={check.label}>
             <CardContent className="p-5">
               <div className="flex items-center justify-between gap-3">
-                <span className="grid size-9 place-items-center rounded-lg bg-white/70">
+                <span className="grid size-9 place-items-center rounded-lg glass-subtle">
                   {check.severity === "ok" ? (
-                    <CheckCircle2 className="size-4 text-emerald-600" />
+                    <CheckCircle2 className="size-4 text-primary" />
                   ) : (
-                    <AlertTriangle className="size-4 text-amber-600" />
+                    <AlertTriangle className="size-4 text-orange-600" />
                   )}
                 </span>
                 <Badge
                   variant={check.severity === "ok" ? "secondary" : "outline"}
-                  className="rounded-md"
+                  className="rounded-full text-[11px]"
                 >
                   {check.count}
                 </Badge>
               </div>
-              <p className="mt-3 text-sm font-medium">{check.label}</p>
+              <p className="mt-3 text-[13px] font-medium">{check.label}</p>
             </CardContent>
           </Card>
         ))}
       </div>
 
-      <div className="grid gap-5 xl:grid-cols-[1fr_22rem]">
-        <Card className="han-card rounded-xl">
-          <CardHeader className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+      <div className="grid gap-4 xl:grid-cols-[1fr_22rem]">
+        <Card>
+          <CardHeader className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <CardTitle>Lesson order</CardTitle>
-              <p className="mt-1 text-sm text-muted-foreground">
+              <p className="mt-1 text-[13px] text-muted-foreground">
                 HSK levels, units, lessons, checkpoints, and boss reviews.
               </p>
             </div>
             <div className="flex flex-wrap gap-2">
-              <Button size="sm">
+              <Button size="sm" className="rounded-full">
                 <Plus className="size-4" />
                 New lesson
               </Button>
-              <Button size="sm" variant="outline">
+              <Button size="sm" variant="outline" className="rounded-full">
                 <Eye className="size-4" />
                 Preview
               </Button>
@@ -178,7 +178,7 @@ export function AdminDashboard() {
                     </TableCell>
                     <TableCell>HSK {lesson.hskLevel}</TableCell>
                     <TableCell>
-                      <Badge variant="secondary" className="rounded-md">
+                      <Badge variant="secondary" className="rounded-full text-[11px]">
                         {lesson.status}
                       </Badge>
                     </TableCell>
@@ -193,24 +193,24 @@ export function AdminDashboard() {
           </CardContent>
         </Card>
 
-        <div className="space-y-5">
-          <Card className="han-card rounded-xl">
+        <div className="space-y-4">
+          <Card>
             <CardHeader>
               <CardTitle>Import / export JSON</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <div className="rounded-xl border border-border/70 bg-white/70 p-3 text-sm">
+              <div className="glass-subtle rounded-2xl p-3 text-[13px]">
                 <p className="font-medium">Real HSK 1-5 seed</p>
                 <p className="mt-1 text-muted-foreground">
                   {seedData.vocabulary.length} vocabulary · {seedData.characters.length} characters ·{" "}
                   {seedData.lessons.length} lessons
                 </p>
-                <p className="mt-1 text-xs text-muted-foreground">
+                <p className="mt-1 text-[11px] text-muted-foreground">
                   Source: Complete HSK Vocabulary, MIT license
                 </p>
               </div>
               <Button
-                className="w-full"
+                className="w-full rounded-full"
                 variant="outline"
                 onClick={handleImportSeed}
                 disabled={seeding}
@@ -222,18 +222,18 @@ export function AdminDashboard() {
                 )}
                 {seeding ? seedStatus : "Import seed"}
               </Button>
-              <Button className="w-full" variant="outline">
+              <Button className="w-full rounded-full" variant="outline">
                 <Download className="size-4" />
                 Export content
               </Button>
-              <Button className="w-full" variant="outline">
+              <Button className="w-full rounded-full" variant="outline">
                 <FileJson className="size-4" />
                 Validate schema
               </Button>
             </CardContent>
           </Card>
 
-          <Card className="han-card rounded-xl">
+          <Card>
             <CardHeader>
               <CardTitle>Prompt template</CardTitle>
             </CardHeader>
@@ -246,14 +246,14 @@ export function AdminDashboard() {
                 className="min-h-36"
                 defaultValue="Return structured JSON. Include simplified, traditional, pinyin, English, difficulty, and related item IDs."
               />
-              <Button className="w-full">Save template</Button>
+              <Button className="w-full rounded-full">Save template</Button>
             </CardContent>
           </Card>
         </div>
       </div>
 
-      <div className="grid gap-5 lg:grid-cols-2">
-        <Card className="han-card rounded-xl">
+      <div className="grid gap-4 lg:grid-cols-2">
+        <Card>
           <CardHeader>
             <CardTitle>Vocabulary manager</CardTitle>
           </CardHeader>
@@ -264,11 +264,11 @@ export function AdminDashboard() {
                   <p className="truncate font-medium">
                     {item.simplified} / {item.traditional}
                   </p>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-[13px] text-muted-foreground">
                     {item.pinyin} · {item.englishMeaning}
                   </p>
                 </div>
-                <Badge variant="secondary" className="rounded-md">
+                <Badge variant="secondary" className="rounded-full text-[11px]">
                   HSK {item.hskLevel}
                 </Badge>
               </div>
@@ -276,7 +276,7 @@ export function AdminDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="han-card rounded-xl">
+        <Card>
           <CardHeader>
             <CardTitle>Grammar manager</CardTitle>
           </CardHeader>
@@ -286,9 +286,9 @@ export function AdminDashboard() {
                 <div className="flex items-center justify-between gap-3">
                   <div className="min-w-0">
                     <p className="truncate font-medium">{point.title}</p>
-                    <p className="text-sm text-muted-foreground">{point.pattern}</p>
+                    <p className="text-[13px] text-muted-foreground">{point.pattern}</p>
                   </div>
-                  <Badge variant="secondary" className="rounded-md">
+                  <Badge variant="secondary" className="rounded-full text-[11px]">
                     HSK {point.hskLevel}
                   </Badge>
                 </div>

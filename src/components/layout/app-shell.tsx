@@ -80,31 +80,6 @@ function isActive(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-function AuroraBackdrop() {
-  return (
-    <div className="aurora-layer" aria-hidden>
-      <div
-        className="aurora-blob size-[42rem] -left-40 -top-32"
-        style={{ background: "oklch(0.82 0.14 158 / 0.55)" }}
-      />
-      <div
-        className="aurora-blob size-[38rem] right-[-10rem] top-[8%]"
-        style={{
-          background: "oklch(0.8 0.12 210 / 0.42)",
-          animationDelay: "-6s",
-        }}
-      />
-      <div
-        className="aurora-blob size-[40rem] left-1/3 bottom-[-16rem]"
-        style={{
-          background: "oklch(0.84 0.12 130 / 0.4)",
-          animationDelay: "-12s",
-        }}
-      />
-    </div>
-  );
-}
-
 function BrandMark({ compact = false }: { compact?: boolean }) {
   return (
     <Link
@@ -133,7 +108,7 @@ function BrandMark({ compact = false }: { compact?: boolean }) {
   );
 }
 
-function ProfileChip({ className }: { className?: string }) {
+function ProfileChip() {
   const { profile } = useAuth();
 
   const displayName = (profile?.displayName as string) || "Private learner";
@@ -151,7 +126,7 @@ function ProfileChip({ className }: { className?: string }) {
       .toUpperCase() || "PL";
 
   return (
-    <div className={cn("glass-subtle rounded-2xl p-3", className)}>
+    <div className="glass-subtle rounded-2xl p-3">
       <div className="flex items-center gap-3">
         <Avatar className="size-9 border border-white/70">
           {profile?.photoURL && (
@@ -164,7 +139,7 @@ function ProfileChip({ className }: { className?: string }) {
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
             <p className="truncate text-xs font-medium">{displayName}</p>
-            <Badge className="rounded-md bg-primary/12 px-1.5 py-0 text-[10px] font-semibold text-primary hover:bg-primary/12">
+            <Badge className="rounded-full bg-primary/12 px-1.5 py-0 text-[10px] font-semibold text-primary hover:bg-primary/12">
               {streak}d
             </Badge>
           </div>
@@ -176,18 +151,18 @@ function ProfileChip({ className }: { className?: string }) {
 }
 
 /**
- * Floating glass icon rail for desktop. Collapsed (icon-only) by default with a
- * hover-expanding panel that reveals labels — keeps the chrome compact while
- * staying discoverable. The active item gets a glowing glass pill behind it.
+ * Stable glass icon rail for desktop. Always-expanded (icon + label), fixed
+ * width — no hover-driven layout shift. Active item gets a glowing glass pill
+ * behind it via a shared layoutId so it slides between destinations.
  */
 function FloatingRail({ pathname }: { pathname: string }) {
   return (
-    <div className="group/rail fixed left-4 top-1/2 z-40 hidden -translate-y-1/2 flex-col gap-2 xl:flex">
-      <div className="glass mb-2 flex w-[3.75rem] flex-col items-center gap-1 rounded-3xl p-2 transition-[width] duration-300 ease-out group-hover/rail:w-[14rem]">
-        <div className="flex h-[3.75rem] items-center px-1">
+    <div className="fixed left-4 top-4 z-40 hidden xl:flex">
+      <div className="glass flex max-h-[calc(100dvh-2rem)] w-60 flex-col gap-3 rounded-3xl p-3">
+        <div className="px-1.5 pt-1">
           <BrandMark />
         </div>
-        <ProfileChip className="hidden group-hover/rail:flex" />
+        <ProfileChip />
         <ScrollRailItems pathname={pathname} />
       </div>
     </div>
@@ -196,7 +171,7 @@ function FloatingRail({ pathname }: { pathname: string }) {
 
 function ScrollRailItems({ pathname }: { pathname: string }) {
   return (
-    <nav className="mt-1 flex max-h-[60vh] min-h-0 flex-col gap-0.5 overflow-y-auto pr-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+    <nav className="mt-0.5 flex min-h-0 flex-1 flex-col gap-0.5 overflow-y-auto pr-1 [scrollbar-width:thin]">
       {primaryNav.map((item) => {
         const Icon = item.icon;
         const active = isActive(pathname, item.href);
@@ -206,7 +181,7 @@ function ScrollRailItems({ pathname }: { pathname: string }) {
             key={item.href}
             href={item.href}
             className={cn(
-              "relative flex h-11 items-center gap-3 rounded-xl px-2.5 text-sm transition-colors",
+              "relative flex h-9 items-center gap-3 rounded-xl px-2.5 text-[13px] font-medium transition-colors",
               active
                 ? "text-primary-foreground"
                 : "text-muted-foreground hover:text-foreground"
@@ -216,11 +191,11 @@ function ScrollRailItems({ pathname }: { pathname: string }) {
               <motion.span
                 layoutId="rail-active"
                 className="glass-pill absolute inset-0 rounded-xl"
-                transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                transition={{ type: "spring", stiffness: 380, damping: 32 }}
               />
             )}
-            <Icon className="relative z-10 size-[18px] shrink-0" />
-            <span className="relative z-10 hidden min-w-0 flex-1 truncate text-left group-hover/rail:inline">
+            <Icon className="relative z-10 size-[17px] shrink-0" />
+            <span className="relative z-10 min-w-0 flex-1 truncate text-left">
               {item.label}
             </span>
           </Link>
@@ -232,7 +207,7 @@ function ScrollRailItems({ pathname }: { pathname: string }) {
 
 function MobileTopBar({ pathname }: { pathname: string }) {
   return (
-    <header className="glass-subtle sticky top-0 z-40 border-b border-white/30 xl:hidden">
+    <header className="glass-subtle sticky top-0 z-40 border-b xl:hidden">
       <div className="mx-auto flex h-14 max-w-3xl items-center justify-between px-4">
         <BrandMark />
         <Sheet>
@@ -241,12 +216,11 @@ function MobileTopBar({ pathname }: { pathname: string }) {
               size="icon-sm"
               variant="ghost"
               aria-label="Open navigation"
-              className="glass-subtle"
             >
               <Menu className="size-4" />
             </Button>
           </SheetTrigger>
-          <SheetContent side="left" className="w-[18rem] border-white/20 bg-transparent p-4 backdrop-blur-2xl">
+          <SheetContent side="left" className="glass w-[18rem] border-white/40 p-4">
             <SheetHeader className="sr-only">
               <SheetTitle>LumaHan navigation</SheetTitle>
               <SheetDescription>
@@ -258,7 +232,7 @@ function MobileTopBar({ pathname }: { pathname: string }) {
                 <BrandMark />
               </div>
               <ProfileChip />
-              <nav className="grid gap-1 overflow-y-auto pr-1">
+              <nav className="grid gap-0.5 overflow-y-auto pr-1">
                 {primaryNav.map((item) => {
                   const Icon = item.icon;
                   const active = isActive(pathname, item.href);
@@ -267,13 +241,13 @@ function MobileTopBar({ pathname }: { pathname: string }) {
                       key={item.href}
                       href={item.href}
                       className={cn(
-                        "flex h-10 items-center gap-3 rounded-xl px-3 text-sm",
+                        "flex h-9 items-center gap-3 rounded-xl px-2.5 text-[13px] font-medium",
                         active
                           ? "glass-pill text-primary-foreground"
-                          : "text-muted-foreground hover:bg-white/40 hover:text-foreground"
+                          : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
                       )}
                     >
-                      <Icon className="size-4" />
+                      <Icon className="size-[17px]" />
                       <span className="truncate">{item.label}</span>
                     </Link>
                   );
@@ -292,17 +266,16 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="relative min-h-[100dvh]">
-      <AuroraBackdrop />
       <FloatingRail pathname={pathname} />
       <MobileTopBar pathname={pathname} />
 
-      <main className="px-4 pb-10 pt-5 sm:px-6 xl:pl-[8.5rem] xl:pr-6">
-        {/* Narrower, more focused content column for a compact-aesthetic feel. */}
+      <main className="px-4 pb-12 pt-5 sm:px-6 xl:pl-[17rem] xl:pr-6">
+        {/* Focused content column for a compact, premium feel. */}
         <motion.div
           key={pathname}
-          initial={{ opacity: 0, y: 8 }}
+          initial={{ opacity: 0, y: 6 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
           className="mx-auto flex w-full max-w-3xl flex-col gap-5"
         >
           {children}
@@ -311,6 +284,3 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     </div>
   );
 }
-
-/* ProfileChip is reused in the rail's expanded state; keep it tolerant of a
-   passing className even though the desktop layout hides it until hover. */

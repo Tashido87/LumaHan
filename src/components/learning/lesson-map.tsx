@@ -79,7 +79,7 @@ function LessonNode({ lesson, index }: { lesson: Lesson; index: number }) {
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2">
                 <h3 className="truncate text-base font-semibold">{lesson.title}</h3>
-                <Badge variant="secondary" className="rounded-md">
+                <Badge variant="secondary" className="rounded-full text-[11px]">
                   {lesson.estimatedMinutes} min
                 </Badge>
               </div>
